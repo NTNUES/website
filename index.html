@@ -17,17 +17,13 @@
 
   <!-- 設定 Tailwind 字型與基本樣式 -->
   <style>
-    /* 引入 Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700;900&display=swap');
+    /* 引入 Google Fonts (僅保留 Noto Sans TC) */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
 
     body { 
-      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; 
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif; 
       background-color: #ffffff;
       color: #1a1a1a;
-    }
-    
-    h1, h2, h3, h4, .serif-font {
-      font-family: "Noto Serif TC", serif;
     }
 
     .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -65,8 +61,13 @@
     const ChevronRight = (props) => <IconWrapper {...props}><path d="m9 18 6-6-6-6"/></IconWrapper>;
     const Download = (props) => <IconWrapper {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></IconWrapper>;
     const ExternalLink = (props) => <IconWrapper {...props}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></IconWrapper>;
+    const Facebook = (props) => <IconWrapper {...props}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></IconWrapper>;
+    const Instagram = (props) => <IconWrapper {...props}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></IconWrapper>;
     const Calendar = (props) => <IconWrapper {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></IconWrapper>;
     const ArrowRight = (props) => <IconWrapper {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconWrapper>;
+    const Mail = (props) => <IconWrapper {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></IconWrapper>;
+    const MapPin = (props) => <IconWrapper {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></IconWrapper>;
+    const Bell = (props) => <IconWrapper {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -98,6 +99,66 @@
         date: "2025/08/27",
         image: "https://drive.google.com/thumbnail?id=1FB2JCcReTGmoINqnqeIl9MpbCVuhWeXj&sz=w3840",
         desc: "新生參與的第一個活動，透過系上老師對系上的介紹、行星分家與抽直屬活動，讓新生更快適應並與大學生活接軌。"
+      }
+    ];
+
+    const announcementsData = [
+      {
+        id: 1,
+        title: "地科系學會期初會員大會",
+        date: "2026/2/13",
+        eventDate: "2026/3/6",
+        department: "會長股",
+        content: `各位會員好\n\n本會將於2026年3月6日(星期五) 12:30 舉行第二學期期初會員大會，地點為理學院E301教室。\n\n本次會議將進行本學期活動預告，並針對「組織章程」及「選舉罷免辦法」進行修訂與投票，詳細內容請見附檔。由於涉及重要章程之變更，請具備投票權（繳交會費）的會員務必撥冗出席，以利會務推動。同時，也歡迎所有會員一同參與會議，針對章程或選罷法修訂內容提出指教與建議。\n\n另外附上便當訂購表單連結：https://forms.gle/bg5Cnbr54byRr47e6\n\n祝 新年快樂\n\n會長 簡志諭`,
+        file: {
+          name: "地科系學會114學年度第二學期期初會員大會會議通知0213.pdf",
+          link: "https://drive.google.com/file/d/1JYig36P-qsEbUqmeqSKU4i5yZEXOYfBs/view?usp=share_link"
+        }
+      },
+      {
+        id: 2,
+        title: "二〇二五臺師大四系聯合耶誕晚會space1225協辦系購票",
+        date: "2025/10/1",
+        eventDate: "",
+        department: "會長股",
+        content: `大家早安\n四系聯合耶誕晚會早鳥票開始購票了喔\n地科系會員價370/張\n非會員優惠價400/張\n不要猶豫了🫵 \n\nℹ️耶晚資訊\n臺師大四系聯合耶誕晚會SPACE❶㊁②㊄\n日期｜2025/12/20 （Sat.）\n時間｜17:00入場 ⁞ 18:00開始\n地點｜臺師大和平校區 綜合體育館四樓\n藝人｜請見 ＠ntnuspace1225\n表單連結｜https://forms.gle/webANJUzrkyBzpjA8\n地科系為協辦並協助宣傳｜有任何問題歡迎私訊地科系學會IG(@ntnu_es)`,
+        file: null
+      },
+      {
+        id: 3,
+        title: "四系聯合迎新烤肉｜生科 × 地科 × 營養 × 化學",
+        date: "2025/9/10",
+        eventDate: "",
+        department: "活動股",
+        content: `🔥【四系聯合迎新烤肉｜生科 × 地科 × 營養 × 化學】🔥\n\n新的學期、新的開始，怎麼能少了最熱鬧的迎新活動？\n今年我們結合了 生科、地科、營養、化學 四大系，準備一場絕對不容錯過的—— 迎新烤肉派對！ 🥓🥬🥤\n\n在這裡，你可以：\n✨ 認識不同科系的新朋友，拓展人脈！\n✨ 在滿滿烤肉香中，享受美食與歡笑！\n\n📅活動時間｜10/2（四）18:30-21:30\n📍活動地點｜華中露營場\n💰費用｜正式會員350元；非會員400元\n報名資格｜四系在學學生，118級新生優先\n繳費時間與地點｜\n9/19 （五）  12:30-13:30 學二交誼廳\n9/22（一）  12:30-13:30 學二交誼廳\n\n帶著期待與好奇，來跟我們一起點燃這個夜晚吧！\n不管你是新生、舊生，都歡迎加入這場跨系盛會～但名額只有20人，要來要快！\n—————————————————————\n⚠️報名人數超出預期，會以有繳會費者優先錄取，再來才是以填表單順序來錄取\n👉 報名連結：https://forms.gle/8CUCkE44P3377iCc9`,
+        file: null
+      },
+      {
+        id: 4,
+        title: "女排場地使用資訊",
+        date: "2025/9/10",
+        eventDate: "",
+        department: "體育股",
+        content: `本學期女排跟物理系女排一起使用場地，若有想加入的人可以找體育股獲得相關資訊`,
+        file: null
+      },
+      {
+        id: 5,
+        title: "新生宿營",
+        date: "2025/9/5",
+        eventDate: "",
+        department: "活動股",
+        content: `轉達\n大家好我是宿營總籌林佳泓，踏入全新的大學生活，還在思考要參加什麼活動、或擔心無法跟同學變熟的朋友們別煩惱了🦊🐰🦊🐰🦊🐰屬於你們的第一個重要活動「新生宿營」要來啦！\n本次由「東亞× 地科× 台文」聯合舉辦「台扯啦!地東裡怎麼有隻穿警裝的兔子?!」新生宿營，各位將化身成動物方城市的探員👮🏻‍♂️👮🏻，和新朋友們共同破解任務，一起合作、奔跑、尖叫🗣️🗣️🗣️!！\n在大家彼此還不太熟悉之時，宿營就是認識同學的最佳機會，透過RPG闖關、水大地、烤肉晚會等豐富活動，加上共同住宿一晚的特別體驗，不僅能快速拉近彼此距離，還能交到不同科系的好友～說不定，還會能在宿營裡收穫愛情呢！😲😍🥰👥🫂\n\n宿營詳細資訊：\n📍地點：雷朗極限探索（249新北市八里區忠五街70號）\n📆時間：2025年9月20至21日（兩天一夜）\n💰費用：2400（有交會費的只要2300！）\n🔗連結：https://docs.google.com/forms/d/e/1FAIpQLSdDDtGD01LfycYZ8iYgwm5TRhD5dPJnjCJgFMgVopx_t6YD9Q/viewform?usp=header\n\n有任何問題都歡迎直接聯絡我～\n還在猶豫的朋友們心動不如馬上行動，千萬別錯過這個屬於大一的第一個精彩篇章，快來加入本次的聯合新生宿營吧，後續也會有更詳細的行前通知！`,
+        file: null
+      },
+      {
+        id: 6,
+        title: "系學會費繳交通知",
+        date: "2025/9/2",
+        eventDate: "",
+        department: "總務股",
+        content: `大家早安\n我是第42屆地球科學系學會總務 張鈞幃\n\n恭喜大家展開新一學期的大學生活！\n我們會因應不同節日，籌辦許多娛樂或是體育類別的活動！為了讓大家有釋放壓力與表現活力的舞台，學會也極力支持各系隊的運作。系上刊物或是系服都代表著地科系，學會這邊也盡我們所能積極出品！每位地科系學生都是我們的基本會員，為了維護大家的權益、讓大家能夠體驗到更美好的活動，需要酌收系學會費，運用在不論是系上學術，抑或是舉辦各個活動之中！\n\n詳細的收支會全部透明化，並在每學期末公開細項與結餘，鞏固大家的權益並且讓經費有安全的流向！\n\n當然，為了保障大家的選擇權，我們提供同學繳費年期的選擇。若先繳一年會費，金額為$700，連續繳兩年會費金額為$1400，如此類推，若想一次繳五年會費，金額為$3500。\n\n預祝大家能夠開開心心、度過新一學期的大學生活！\n\n以下為系學會專用之郵局帳戶資訊：\n郵局代號：700\n帳號：0001972 0090269\n\n匯款成功後請填寫回覆表單，之後也會開立收據\n\n回覆表單連結:https://forms.gle/dZDAmqKX3bM8wVWp8\n\n目前開了幾個時段大家可以來繳費\n9/5  12:30-14:00\n9/8  12:30-14:00\n9/12 12:30-14:00\n\n另外，如果時間都對不上，也可以在之後找總務繳交系費\n\n若您有任何繳費相關問題，歡迎隨時與系學會長聯繫\n\n總務 張鈞幃、徐秉辰`,
+        file: null
       }
     ];
 
@@ -158,7 +219,7 @@
                     <span className="block text-sm md:text-lg font-medium tracking-wider mb-2 text-blue-200 drop-shadow-md">
                       {slide.date}
                     </span>
-                    <h2 className="text-2xl md:text-5xl font-bold serif-font tracking-wide drop-shadow-md flex flex-wrap items-center gap-3 leading-tight">
+                    <h2 className="text-2xl md:text-5xl font-bold tracking-wide drop-shadow-md flex flex-wrap items-center gap-3 leading-tight">
                       {slide.title}
                       {slide.subtitle && <span className="text-lg md:text-2xl font-light opacity-90 block w-full mt-1">{slide.subtitle}</span>}
                       <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm bg-white/20 p-1.5 rounded-full mt-2"><ArrowRight size={24} /></span>
@@ -184,6 +245,84 @@
       );
     };
 
+    // --- 公告手風琴組件 ---
+    const AnnouncementAccordion = ({ announcement }) => {
+      const [isOpen, setIsOpen] = useState(false);
+
+      // 簡單的文字格式化函數，將網址轉換為可點擊的連結，並處理換行
+      const formatContent = (content) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return content.split('\n').map((line, i) => (
+          <React.Fragment key={i}>
+            {line.split(urlRegex).map((part, j) => {
+              if (part.match(urlRegex)) {
+                return (
+                  <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                    {part}
+                  </a>
+                );
+              }
+              return part;
+            })}
+            <br />
+          </React.Fragment>
+        ));
+      };
+
+      return (
+        <div className={`border rounded-lg overflow-hidden transition-all duration-300 ${isOpen ? 'border-[#003B71] shadow-md bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="w-full px-6 py-4 flex flex-col md:flex-row md:items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none gap-4"
+          >
+            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-left w-full pr-4">
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="text-sm font-medium text-[#003B71] bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                  {announcement.department}
+                </span>
+                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap">
+                  <Calendar size={14} />
+                  {announcement.date}
+                </span>
+              </div>
+              <h3 className={`text-lg font-bold transition-colors break-words ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
+                 {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
+                 {announcement.title}
+              </h3>
+            </div>
+            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 self-end md:self-auto ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+               <ChevronDown size={20} />
+            </div>
+          </button>
+          
+          <div 
+            className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+          >
+            <div className="overflow-hidden">
+              <div className="px-6 py-6 bg-slate-50/50 border-t border-gray-100">
+                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base">
+                  {formatContent(announcement.content)}
+                </div>
+                {announcement.file && (
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <a 
+                      href={announcement.file.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:text-[#003B71] hover:border-[#003B71] transition-colors shadow-sm"
+                    >
+                      <Download size={16} />
+                      附檔：{announcement.file.name}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
     // --- 主要應用程式 ---
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
@@ -193,7 +332,7 @@
       }, [activeTab]);
 
       const navItems = [
-        { id: 'intro', label: '學會簡介' },
+        { id: 'intro', label: '主頁' },
         { id: 'events', label: '活動介紹' },
         { id: 'history', label: '學會歷史' },
         { id: 'members', label: '成員介紹' },
@@ -228,8 +367,8 @@
                         referrerPolicy="no-referrer"
                       />
                       <div className="flex flex-col items-center md:items-start">
-                        <span className="text-xs font-medium text-gray-500 tracking-[0.15em] uppercase">National Taiwan Normal University</span>
-                        <h1 className="text-xl md:text-2xl font-bold text-[#003B71] tracking-wide serif-font">地球科學系學會</h1>
+                        <span className="text-xs font-medium text-gray-500 tracking-[0.15em] uppercase font-bold">National Taiwan Normal University</span>
+                        <h1 className="text-xl md:text-2xl font-bold text-[#003B71] tracking-wide">地球科學系學會</h1>
                       </div>
                     </div>
                  </div>
@@ -244,7 +383,7 @@
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`py-4 text-sm tracking-widest transition-all duration-300 border-b-2 font-medium
+                      className={`py-4 text-sm tracking-widest transition-all duration-300 border-b-2 font-medium whitespace-nowrap
                         ${activeTab === item.id ? 'border-[#003B71] text-[#003B71]' : 'border-transparent text-gray-400 hover:text-gray-800'}`}
                     >
                       {item.label}
@@ -267,16 +406,16 @@
                 {/* Logo & Copyright */}
                 <div>
                   <div className="mb-2">
-                    <span className="font-serif font-bold text-[#003B71] text-xl">NTNU Earth Sciences</span>
+                    <span className="font-bold text-[#003B71] text-xl tracking-wide">NTNU Earth Sciences</span>
                   </div>
-                  <p className="text-sm text-gray-500 mb-1">國立臺灣師範大學 地球科學系學會</p>
+                  <p className="text-sm text-gray-500 mb-1 font-medium">國立臺灣師範大學 地球科學系學會</p>
                   <p className="text-xs text-gray-400 tracking-wider">© {new Date().getFullYear()} All Rights Reserved.</p>
                 </div>
 
                 {/* Contact Info - 無圖示，文字置中，冒號改空格 */}
-                <div className="space-y-4 flex flex-col items-center">
+                <div className="space-y-4 flex flex-col items-center w-full max-w-md">
                   <h4 className="font-bold text-gray-900 tracking-wide uppercase text-sm border-b border-gray-200 pb-2 inline-block">聯絡我們 Contact Us</h4>
-                  <div className="space-y-3 text-sm text-gray-600">
+                  <div className="space-y-3 text-sm text-gray-600 text-left w-full pl-0 md:pl-[10%]">
                     <p>地址 (11677) 台北市文山區汀州路四段88號</p>
                     <p>
                       <a href="mailto:ntnues42@gmail.com" className="hover:text-[#003B71] transition-colors">email ntnues42@gmail.com</a>
@@ -296,59 +435,35 @@
       );
     }
 
-    // --- 1. 簡介區塊 ---
+    // --- 1. 主頁區塊 (原簡介) ---
     const IntroSection = ({ onNavigate }) => (
       <div className="fade-in-up">
         {/* 加入輪播圖組件，並傳入導航函數 */}
         <HeroCarousel onNavigate={onNavigate} />
 
-        {/* 活動預告區塊 */}
-        <div className="max-w-4xl mx-auto px-6 mb-20 -mt-6 relative z-20">
-          <div className="bg-white p-6 md:p-8 shadow-xl shadow-blue-900/5 rounded-lg border border-gray-100">
-            <h3 className="text-[#003B71] font-bold tracking-widest text-sm uppercase mb-6 flex items-center gap-2">
-              <Calendar size={18} />
-              Upcoming Events 2026
-            </h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Event Item 1 */}
-              <div className="flex gap-4 items-start group">
-                <div className="flex-shrink-0 w-16 text-center">
-                  <span className="block text-2xl font-bold text-[#003B71] serif-font">07</span>
-                  <span className="block text-xs font-medium text-gray-400 uppercase">MAR</span>
-                  <span className="block text-xs text-gray-300">2026</span>
-                </div>
-                <div className="border-l border-gray-200 pl-4 transition-colors group-hover:border-[#003B71]">
-                  <h4 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-[#003B71] transition-colors">第四屆小地盃</h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">系上傳統體育競賽，歡迎組隊參加。</p>
-                </div>
-              </div>
-
-              {/* Event Item 2 */}
-              <div className="flex gap-4 items-start group">
-                <div className="flex-shrink-0 w-16 text-center">
-                  <span className="block text-2xl font-bold text-[#003B71] serif-font">20</span>
-                  <span className="block text-xs font-medium text-gray-400 uppercase">APR</span>
-                  <span className="block text-xs text-gray-300">2026</span>
-                </div>
-                <div className="border-l border-gray-200 pl-4 transition-colors group-hover:border-[#003B71]">
-                  <h4 className="font-bold text-gray-900 text-lg mb-1 group-hover:text-[#003B71] transition-colors">地科週 & 地科展</h4>
-                  <p className="text-xs text-[#003B71] font-medium mb-1">04/20-24 地科週 | 04/25 地科展</p>
-                  <p className="text-sm text-gray-500 leading-relaxed">透過學生舉辦的展覽，結合系上實驗室的開放，將地科知識科普給大眾。</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
         <div className="max-w-4xl mx-auto px-6 space-y-20 pb-12">
+          
+          {/* 最新公告區塊 */}
+          <section className="pt-4 -mt-10 relative z-20">
+             <div className="mb-6 flex items-center gap-2 border-b border-gray-200 pb-3">
+              <Bell size={24} className="text-[#003B71]" />
+              <h3 className="text-2xl font-bold text-gray-900">最新公告</h3>
+            </div>
+            <div className="space-y-4">
+              {announcementsData.map((announcement) => (
+                <AnnouncementAccordion key={announcement.id} announcement={announcement} />
+              ))}
+            </div>
+          </section>
+
           {/* Slogan 區塊 */}
           <section className="text-center py-10 border-b border-gray-100">
-            <h2 className="text-4xl md:text-5xl font-black text-[#003B71] mb-6 leading-tight serif-font">
+            <h2 className="text-4xl md:text-5xl font-black text-[#003B71] mb-6 leading-tight">
               凝聚系上情感<br/>
-              <span className="text-3xl md:text-4xl text-[#003B71]/80 mt-2 block">共創美好回憶</span>
+              <span className="text-3xl md:text-4xl text-[#003B71]/80 mt-2 block font-bold">共創美好回憶</span>
             </h2>
             <div className="w-16 h-1 bg-[#003B71] mx-auto mb-8"></div>
-            <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-loose font-light">
+            <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-loose font-medium">
               歡迎來到師大地科系學會官方網站。<br/>
               我們致力於搭起學生與系所之間的橋樑，<br className="hidden md:block"/>
               舉辦學術講座、體育競賽與娛樂活動。
@@ -359,7 +474,7 @@
           <section>
             <div className="mb-8">
               <span className="text-[#003B71] font-bold tracking-widest text-sm uppercase mb-2 block">About Us</span>
-              <h3 className="text-3xl font-bold text-gray-900 serif-font">關於系學會</h3>
+              <h3 className="text-3xl font-bold text-gray-900">關於系學會</h3>
             </div>
             
             <div className="prose prose-lg text-gray-600 leading-relaxed space-y-6 text-justify">
@@ -369,9 +484,9 @@
               <p>
                 我們的活動緊扣著互相認識和團結合作的主旨。從學系之夜的歡談，到系烤的美食時光，每一個活動都是讓你們放鬆心情、交流情感的絕佳機會。制服趴、萬聖趴、聖誕趴等主題趴活動，將帶來歡笑和趣味，讓你們共同創造美好的回憶。
               </p>
-              <div className="pl-6 border-l-2 border-[#003B71] italic text-gray-500 my-8">
+              <p>
                 我們了解大學生活中建立起的深厚友誼有多重要。因此，我們安排了系出遊，讓你們能在旅行中更深入地了解彼此。
-              </div>
+              </p>
               <p>
                 此外，我們還舉辦了系展，向校內外展示地科系的凝聚力和多彩活動、學術內容。地科營則是一個帶有教育性質的活動，讓高中生們更能了解地科系。無論你是新生還是資深學長姐，我們都歡迎你加入我們的活動。
               </p>
@@ -382,12 +497,12 @@
           <section className="pt-12 border-t border-gray-100">
             <div className="mb-8">
               <span className="text-[#003B71] font-bold tracking-widest text-sm uppercase mb-2 block">Department</span>
-              <h3 className="text-3xl font-bold text-gray-900 serif-font">關於學系</h3>
+              <h3 className="text-3xl font-bold text-gray-900">關於學系</h3>
             </div>
 
             <div className="space-y-8">
               <div className="bg-slate-50 p-8 md:p-10">
-                <h4 className="text-2xl font-bold text-[#003B71] mb-4 serif-font">注意看 這個校系叫師大地科</h4>
+                <h4 className="text-2xl font-bold text-[#003B71] mb-4">注意看 這個校系叫師大地科</h4>
                 <p className="text-xl font-medium text-gray-700 mb-6">居然是全台唯一五大領域通包的地球解密所！</p>
                 <p className="text-gray-600 leading-loose">
                   師大地科的前身，是1976年(民國65年)從物理系分出來的「地球科學組」 ，後來在1984年正式獨立成系，是全國最早以培養地科老師為宗旨的科系之一。
@@ -423,13 +538,12 @@
       </div>
     );
 
-    // --- 2. 活動介紹區塊 ---
+    // --- 2. 活動介紹區 ---
     const EventsSection = () => {
-      // 直接使用 eventsData 並渲染
       return (
         <div className="max-w-5xl mx-auto px-6 pt-12 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] serif-font mb-3">活動介紹</h2>
+            <h2 className="text-3xl font-bold text-[#003B71] mb-3">活動介紹</h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">Our Events</p>
           </div>
           
@@ -458,7 +572,7 @@
                       {event.date}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 serif-font group-hover:text-[#003B71] transition-colors">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#003B71] transition-colors">
                     {event.title}
                   </h3>
                   {event.subtitle && <p className="text-sm font-bold text-blue-600 mb-3">{event.subtitle}</p>}
@@ -482,7 +596,7 @@
       return (
         <div className="max-w-2xl mx-auto px-6 pt-12 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] serif-font mb-3">輝煌歷史</h2>
+            <h2 className="text-3xl font-bold text-[#003B71] mb-3">輝煌歷史</h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">History & Milestones</p>
           </div>
           <div className="space-y-12 border-l border-gray-200 ml-4 pl-8 md:pl-12 py-2">
@@ -490,7 +604,7 @@
               <div key={index} className="relative group">
                 <div className="absolute -left-[41px] md:-left-[57px] top-2 w-3 h-3 rounded-full bg-white border-2 border-[#003B71] group-hover:bg-[#003B71] transition-colors"></div>
                 <div className="transition-all">
-                  <span className="text-[#003B71] font-bold text-xl block mb-2 serif-font">{item.year}</span>
+                  <span className="text-[#003B71] font-bold text-xl block mb-2">{item.year}</span>
                   <h3 className="text-lg font-bold text-gray-800 mb-3">{item.title}</h3>
                   <p className="text-gray-600 text-base leading-relaxed">{item.desc}</p>
                 </div>
@@ -537,7 +651,7 @@
       return (
         <div className="max-w-4xl mx-auto px-6 pt-12 space-y-8 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] serif-font mb-3">歷屆成員</h2>
+            <h2 className="text-3xl font-bold text-[#003B71] mb-3">歷屆成員</h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">Our Team Members</p>
           </div>
           <div className="space-y-4">
@@ -555,7 +669,7 @@
         <div className="border-b border-gray-200">
           <button onClick={() => setIsOpen(!isOpen)} className="w-full py-6 flex items-center justify-between bg-white hover:text-[#003B71] transition-colors focus:outline-none group">
             <div className="flex items-center gap-6">
-              <span className={`text-2xl font-serif font-bold ${term.active ? 'text-[#003B71]' : 'text-gray-300 group-hover:text-gray-500'}`}>
+              <span className={`text-2xl font-bold ${term.active ? 'text-[#003B71]' : 'text-gray-300 group-hover:text-gray-500'}`}>
                 {term.id < 10 ? `0${term.id}` : term.id}
               </span>
               <div className="text-left">
@@ -604,7 +718,7 @@
       return (
         <div className="max-w-4xl mx-auto px-6 pt-12 fade-in-up">
            <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] serif-font mb-3">相關文件</h2>
+            <h2 className="text-3xl font-bold text-[#003B71] mb-3">相關文件</h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">Downloads & Resources</p>
           </div>
           <div className="grid gap-0 border-t border-gray-200">
