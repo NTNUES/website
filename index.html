@@ -41,6 +41,11 @@
         transform: translateY(0);
       }
     }
+
+    /* 自定義 checkbox 顏色 */
+    input[type="checkbox"] {
+      accent-color: #003B71;
+    }
   </style>
 </head>
 <body>
@@ -67,6 +72,7 @@
     const ArrowRight = (props) => <IconWrapper {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconWrapper>;
     const Mail = (props) => <IconWrapper {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></IconWrapper>;
     const Bell = (props) => <IconWrapper {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></IconWrapper>;
+    const Filter = (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -533,23 +539,32 @@
       );
     };
 
-    // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
+    // --- 1.5 所有公告分頁區塊 (含篩選功能，靠左核取方塊排列) ---
     const AnnouncementsSection = () => {
-      const [selectedYear, setSelectedYear] = useState('全部');
-      const [selectedDept, setSelectedDept] = useState('全部');
+      const [selectedYears, setSelectedYears] = useState([]);
+      const [selectedDepts, setSelectedDepts] = useState([]);
 
-      // 提取並過濾出不重複的年份與股別，並加上排序
-      const years = ['全部', ...Array.from(new Set(announcementsData.map(a => a.date.split('/')[0])))].sort((a, b) => {
-        if (a === '全部') return -1;
-        if (b === '全部') return 1;
-        return b.localeCompare(a); // 由新到舊排序
-      });
-      const depts = ['全部', ...Array.from(new Set(announcementsData.flatMap(a => a.departments)))];
+      // 提取並過濾出不重複的年份與股別，並加上排序 (新到舊)
+      const years = Array.from(new Set(announcementsData.map(a => a.date.split('/')[0]))).sort((a, b) => b.localeCompare(a));
+      const depts = Array.from(new Set(announcementsData.flatMap(a => a.departments)));
 
-      // 依據條件篩選公告
+      const handleYearChange = (year) => {
+        setSelectedYears(prev => 
+          prev.includes(year) ? prev.filter(y => y !== year) : [...prev, year]
+        );
+      };
+
+      const handleDeptChange = (dept) => {
+        setSelectedDepts(prev => 
+          prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]
+        );
+      };
+
+      // 依據條件篩選公告：如果沒有勾選任何項目，則視為「全選」
       const filteredData = announcementsData.filter(a => {
-        const matchYear = selectedYear === '全部' || a.date.startsWith(selectedYear);
-        const matchDept = selectedDept === '全部' || a.departments.includes(selectedDept);
+        const year = a.date.split('/')[0];
+        const matchYear = selectedYears.length === 0 || selectedYears.includes(year);
+        const matchDept = selectedDepts.length === 0 || a.departments.some(d => selectedDepts.includes(d));
         return matchYear && matchDept;
       });
 
@@ -560,27 +575,50 @@
             <p className="text-gray-400 text-sm tracking-widest uppercase">Announcements</p>
           </div>
 
-          {/* 篩選器 UI */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center md:justify-end">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600">年份</span>
-              <select 
-                value={selectedYear} 
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className="border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:border-[#003B71] bg-white cursor-pointer"
-              >
-                {years.map(year => <option key={year} value={year}>{year === '全部' ? '全部年份' : year}</option>)}
-              </select>
+          {/* 篩選器 UI (靠左對齊、核取方塊、上下層) */}
+          <div className="bg-slate-50 p-6 rounded-lg border border-gray-100 mb-8 flex flex-col gap-6">
+            <div className="flex items-center gap-2 mb-1 border-b border-gray-200 pb-2">
+              <Filter size={18} className="text-gray-500" />
+              <h4 className="text-sm font-bold text-gray-700 tracking-wide">篩選條件</h4>
+              <span className="text-xs text-gray-400 ml-2">(未勾選時顯示全部)</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600">股別</span>
-              <select 
-                value={selectedDept} 
-                onChange={(e) => setSelectedDept(e.target.value)}
-                className="border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:border-[#003B71] bg-white cursor-pointer"
-              >
-                {depts.map(dept => <option key={dept} value={dept}>{dept === '全部' ? '全部股別' : dept}</option>)}
-              </select>
+            
+            {/* 年份勾選區 */}
+            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
+              <span className="text-sm font-bold text-[#003B71] w-12 shrink-0 pt-0.5">年份</span>
+              <div className="flex flex-wrap gap-4">
+                {years.map(year => (
+                  <label key={year} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-[#003B71] transition-colors">
+                    <input 
+                      type="checkbox" 
+                      value={year}
+                      checked={selectedYears.includes(year)}
+                      onChange={() => handleYearChange(year)}
+                      className="w-4 h-4 rounded border-gray-300 text-[#003B71] focus:ring-[#003B71] cursor-pointer"
+                    />
+                    {year}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* 股別勾選區 */}
+            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
+              <span className="text-sm font-bold text-[#003B71] w-12 shrink-0 pt-0.5">股別</span>
+              <div className="flex flex-wrap gap-4">
+                {depts.map(dept => (
+                  <label key={dept} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-[#003B71] transition-colors">
+                    <input 
+                      type="checkbox" 
+                      value={dept}
+                      checked={selectedDepts.includes(dept)}
+                      onChange={() => handleDeptChange(dept)}
+                      className="w-4 h-4 rounded border-gray-300 text-[#003B71] focus:ring-[#003B71] cursor-pointer"
+                    />
+                    {dept}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
           
@@ -590,8 +628,9 @@
                 <AnnouncementAccordion key={announcement.id} announcement={announcement} />
               ))
             ) : (
-              <div className="text-center py-12 text-gray-500 bg-slate-50 rounded-lg border border-gray-100">
-                目前沒有符合此條件的公告。
+              <div className="text-center py-16 text-gray-500 bg-slate-50 rounded-lg border border-gray-100 flex flex-col items-center justify-center">
+                <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
+                <p className="text-sm">請嘗試調整您的篩選條件。</p>
               </div>
             )}
           </div>
