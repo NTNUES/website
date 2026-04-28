@@ -137,6 +137,14 @@
       },
       {
         id: 4,
+        title: "地球科學系學會第43屆會長改選政見發表",
+        date: "2026/4/10",
+        departments: ["選委會"],
+        content: `紀錄影片：https://www.youtube.com/watch?v=IzzQ4TEZvuM`,
+        file: null
+      },
+      {
+        id: 5,
         title: "地球科學系學會第四十三屆正副會長改選選舉公報公布",
         date: "2026/4/9",
         departments: ["選委會"],
@@ -147,7 +155,7 @@
         }
       },
       {
-        id: 5,
+        id: 6,
         title: "地球科學系學會第43屆正副會長改選時程",
         date: "2026/4/2",
         departments: ["選委會"],
@@ -155,7 +163,7 @@
         file: null
       },
       {
-        id: 6,
+        id: 7,
         title: "水上運動會報名",
         date: "2026/4/2",
         departments: ["體育股"],
@@ -163,7 +171,7 @@
         file: null
       },
       {
-        id: 7,
+        id: 8,
         title: "會長改選說明會+歐趴糖",
         date: "2026/3/30",
         departments: ["會長股", "公關股"],
@@ -171,7 +179,15 @@
         file: null
       },
       {
-        id: 8,
+        id: 9,
+        title: "2026地科展",
+        date: "2026/3/26",
+        departments: ["活動股"],
+        content: `2026地科展將於2026年4月25日舉行\n📅 2026 年 4 月 25 日（六）09:30–16:30\n📍 師大公館校區\n👉 活動詳情請見：https://youb1707.wixsite.com/ntnues2026openhouse`,
+        file: null
+      },
+      {
+        id: 10,
         title: "地科系學會期初會員大會",
         date: "2026/2/13",
         eventDate: "2026/3/6",
@@ -183,7 +199,7 @@
         }
       },
       {
-        id: 9,
+        id: 11,
         title: "二〇二五臺師大四系聯合耶誕晚會space1225協辦系購票",
         date: "2025/10/1",
         departments: ["會長股"],
@@ -191,7 +207,7 @@
         file: null
       },
       {
-        id: 10,
+        id: 12,
         title: "四系聯合迎新烤肉｜生科 × 地科 × 營養 × 化學",
         date: "2025/9/10",
         departments: ["活動股"],
@@ -199,7 +215,7 @@
         file: null
       },
       {
-        id: 11,
+        id: 13,
         title: "女排場地使用資訊",
         date: "2025/9/10",
         departments: ["體育股"],
@@ -207,7 +223,7 @@
         file: null
       },
       {
-        id: 12,
+        id: 14,
         title: "新生宿營",
         date: "2025/9/5",
         departments: ["活動股"],
@@ -215,7 +231,7 @@
         file: null
       },
       {
-        id: 13,
+        id: 15,
         title: "系學會費繳交通知",
         date: "2025/9/2",
         departments: ["總務股"],
@@ -335,26 +351,28 @@
         <div className={`border rounded-lg overflow-hidden transition-all duration-300 ${isOpen ? 'border-[#003B71] shadow-md bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="w-full px-6 py-4 flex flex-col md:flex-row md:items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none gap-4"
+            className="w-full px-6 py-4 flex items-start md:items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none gap-4"
           >
-            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-left w-full pr-4">
-              <div className="flex items-center gap-2 shrink-0 flex-wrap">
-                {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-sm font-medium text-[#003B71] bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
-                    {dept}
-                  </span>
-                ))}
-                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap ml-1">
+            <div className="flex flex-col text-left w-full pr-4 gap-2">
+              <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0">
                   <Calendar size={14} />
                   {announcement.date}
                 </span>
+                <h3 className={`text-lg font-bold transition-colors break-words ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
+                   {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
+                   {announcement.title}
+                </h3>
               </div>
-              <h3 className={`text-lg font-bold transition-colors break-words mt-1 md:mt-0 ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
-                 {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
-                 {announcement.title}
-              </h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                {announcement.departments.map((dept, idx) => (
+                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                    {dept}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 self-end md:self-auto ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
                <ChevronDown size={20} />
             </div>
           </button>
@@ -481,7 +499,7 @@
                 {/* Contact Info */}
                 <div className="space-y-4 flex flex-col items-center w-full max-w-md">
                   <h4 className="font-bold text-gray-900 tracking-wide uppercase text-sm border-b border-gray-200 pb-2 inline-block">聯絡我們 Contact Us</h4>
-                  <div className="space-y-3 text-sm text-gray-600 text-left w-full pl-0 md:pl-[10%]">
+                  <div className="space-y-3 text-sm text-gray-600 items-center w-full pl-0">
                     <p>地址 (11677) 台北市文山區汀州路四段88號</p>
                     <p>
                       <a href="mailto:ntnues42@gmail.com" className="hover:text-[#003B71] transition-colors">email ntnues42@gmail.com</a>
