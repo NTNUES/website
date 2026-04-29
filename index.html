@@ -73,6 +73,7 @@
     const Mail = (props) => <IconWrapper {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></IconWrapper>;
     const Bell = (props) => <IconWrapper {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></IconWrapper>;
     const Filter = (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>;
+    const Eye = (props) => <IconWrapper {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -137,7 +138,7 @@
       },
       {
         id: 4,
-        title: "地球科學系學會第四十三屆會長改選政見發表",
+        title: "地球科學系學會第43屆會長改選政見發表",
         date: "2026/4/10",
         departments: ["選委會"],
         content: `紀錄影片：https://www.youtube.com/watch?v=IzzQ4TEZvuM`,
@@ -156,7 +157,7 @@
       },
       {
         id: 6,
-        title: "地球科學系學會第四十三屆正副會長改選時程",
+        title: "地球科學系學會第43屆正副會長改選時程",
         date: "2026/4/2",
         departments: ["選委會"],
         content: `本次選委會名單為：簡志諭（主席）、李冠廷、郭傲寒、張鈞幃、林佳泓\n開放候選人登記時間：4/2 00:00 至 4/8 20:17\n改選說明會（E101）：4/2 12:30-13:10 \n候選人與政見公布：4/9 至 4/16\n候選人政見發表會（E101）：4/10 12:30-13:10\n投票日（線上投票）：4/17 9:00-17:00`,
@@ -227,7 +228,7 @@
         title: "新生宿營",
         date: "2025/9/5",
         departments: ["活動股"],
-        content: `轉達\n大家好我是宿營總籌林佳泓，踏入全新的大學生活，還在思考要參加什麼活動、或擔心無法跟同學變熟的朋友們別煩惱了🦊🐰🦊🐰🦊🐰屬於你們的第一個重要活動「新生宿營」要來啦！\n本次由「東亞× 地科× 台文」聯合舉辦「台扯啦!地東裡怎麼有隻穿警裝的兔子?!」新生宿營，各位將化身成動物方城市的探員👮🏻‍♂️👮🏻，和新朋友們共同破解任務，一起合作、奔跑、尖叫🗣️🗣️🗣️!！\n在大家彼此還不太熟悉之時，宿營就是認識同學的最佳機會，透過RPG闖關、水大地、烤肉晚會等豐富活動，加上共同住宿一晚的特別體驗，不僅能快速拉近彼此距離，還能交到不同科系的好友～說不定，還會能在宿營裡收穫愛情呢！😲😍🥰👥🫂\n\n宿營詳細資訊：\n📍地點：雷朗極限探索（249新北市八里區忠五街70號）\n📆時間：2025年9月20至21日（兩天一夜）\n💰費用：2400（有交會費的只要2300！）\n🔗連結：https://docs.google.com/forms/d/e/1FAIpQLSdDDtGD01LfycYZ8iYgwm5TRhD5dPJnjCJgFMgVopx_t6YD9Q/viewform?usp=header\n\n有任何問題都歡迎直接聯絡我～\n還在猶豫的朋友們心動不如馬上行動，千萬別錯過這個屬於大一的第一個精彩篇章，快來加入本次的聯合新生宿營吧，後續也會有更詳細的行前通知！`,
+        content: `轉達\n大家好我是宿營總籌林佳泓，踏入全新的大學生活，還在思考要參加什麼活動、或擔心無法跟同學變熟的朋友們別煩惱了🦊🐰🦊🐰🦊🐰屬於你們的第一個重要活動「新生宿營」要來啦！\n本次由「東亞× 地科× 台文」聯合舉辦「台扯啦!地東裡怎麼有隻穿警裝的兔子?!」新生宿營，各位將化身成動物方城市的探員👮🏻‍♂️👮🏻，和新朋友們共同破解任務，一起合作、奔跑、尖叫🗣️🗣️🗣️!！\n在大家彼此還不太熟悉之時，宿營就是認識同學的最佳機會，透過RPG闖關、水大地、烤肉晚會等豐富活動，加上共同住宿一晚的特別體驗，不僅能快速拉近彼此距離，還能交到不同科系的好友～說不定，還會能在宿營裡收穫愛情呢！😲😍🥰👥🫂\n\n宿營詳細資訊：\n📍地點：雷朗極限探索（249新北市八里區忠五街70號）\n📆時間：2025年9月20至21日（兩天一夜）\n💰費用：2400（有交會費的只要2300！）\n🔗連結：https://docs.google.com/forms/d/e/1FAIpQLSdDDtGD01LfycYZ8iYgwm5TRhD5dPJnjCJgFMgVopx_t6YD9Q/viewform?usp=header\n\n有任何問題都歡迎直接聯絡我～\n還在猶豫的朋友們心動不如马上行動，千萬別錯過這個屬於大一的第一個精彩篇章，快來加入本次的聯合新生宿營吧，後續也會有更詳細的行前通知！`,
         file: null
       },
       {
@@ -323,9 +324,18 @@
       );
     };
 
-    // --- 公告手風琴組件 ---
-    const AnnouncementAccordion = ({ announcement }) => {
+    // --- 公告手風琴組件 (深淺交錯排列 + 點擊數) ---
+    const AnnouncementAccordion = ({ announcement, index }) => {
       const [isOpen, setIsOpen] = useState(false);
+      // 使用一個基於 ID 計算的預設點擊數，讓它看起來比較逼真且不會在每次渲染時變動
+      const [clicks, setClicks] = useState(announcement.id * 13 + 42);
+
+      const handleToggle = () => {
+        if (!isOpen) {
+          setClicks(prev => prev + 1); // 點開時增加點擊數
+        }
+        setIsOpen(!isOpen);
+      };
 
       // 簡單的文字格式化函數，將網址轉換為可點擊的連結，並處理換行
       const formatContent = (content) => {
@@ -347,33 +357,44 @@
         ));
       };
 
+      // 判斷背景顏色 (深淺相間)
+      const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+
       return (
-        <div className={`border rounded-lg overflow-hidden transition-all duration-300 ${isOpen ? 'border-[#003B71] shadow-md bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`}>
+        <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
           <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="w-full px-6 py-4 flex items-start md:items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none gap-4"
+            onClick={handleToggle} 
+            className="w-full px-4 md:px-6 py-5 flex items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group"
           >
             <div className="flex flex-col text-left w-full pr-4 gap-2">
-              <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0">
-                  <Calendar size={14} />
+              <div className="flex items-start md:items-center w-full">
+                <span className="text-sm font-medium text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
+                  <Calendar size={14} className="shrink-0" />
                   {announcement.date}
                 </span>
-                <h3 className={`text-lg font-bold transition-colors break-words ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
+                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71]' : 'text-gray-800 group-hover:text-[#003B71]'}`}>
                    {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
                    {announcement.title}
                 </h3>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap pl-0 md:pl-32">
                 {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-100/50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
                     {dept}
                   </span>
                 ))}
               </div>
             </div>
-            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
-               <ChevronDown size={20} />
+            
+            {/* 右側：點擊數與箭頭 */}
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="hidden md:flex items-center gap-1.5 text-xs text-gray-400 font-medium bg-white px-2 py-1 rounded-full shadow-sm border border-gray-100" title="點擊數">
+                <Eye size={14} />
+                <span>{clicks}</span>
+              </div>
+              <div className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
+                 <ChevronDown size={20} />
+              </div>
             </div>
           </button>
           
@@ -381,12 +402,12 @@
             className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
           >
             <div className="overflow-hidden">
-              <div className="px-6 py-6 bg-slate-50/50 border-t border-gray-100">
-                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base">
+              <div className="px-4 md:px-6 pt-2 pb-6">
+                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-32">
                   {formatContent(announcement.content)}
                 </div>
                 {announcement.file && (
-                  <div className="mt-6 pt-4 border-t border-gray-200">
+                  <div className="mt-4 ml-1 md:ml-32">
                     <a 
                       href={announcement.file.link} 
                       target="_blank" 
@@ -546,9 +567,9 @@
                   </button>
                 )}
               </div>
-              <div className="space-y-4">
-                {recentAnnouncements.map((announcement) => (
-                  <AnnouncementAccordion key={announcement.id} announcement={announcement} />
+              <div className="border-t border-gray-200">
+                {recentAnnouncements.map((announcement, index) => (
+                  <AnnouncementAccordion key={announcement.id} announcement={announcement} index={index} />
                 ))}
               </div>
             </section>
@@ -557,7 +578,7 @@
       );
     };
 
-    // --- 1.5 所有公告分頁區塊 (含篩選功能，靠左核取方塊排列) ---
+    // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
     const AnnouncementsSection = () => {
       const [selectedYears, setSelectedYears] = useState([]);
       const [selectedDepts, setSelectedDepts] = useState([]);
@@ -578,7 +599,7 @@
         );
       };
 
-      // 依據條件篩選公告：如果沒有勾選任何項目，則視為「全選」
+      // 依據條件篩選公告
       const filteredData = announcementsData.filter(a => {
         const year = a.date.split('/')[0];
         const matchYear = selectedYears.length === 0 || selectedYears.includes(year);
@@ -593,7 +614,7 @@
             <p className="text-gray-400 text-sm tracking-widest uppercase">Announcements</p>
           </div>
 
-          {/* 篩選器 UI (靠左對齊、核取方塊、上下層) */}
+          {/* 篩選器 UI */}
           <div className="bg-slate-50 p-6 rounded-lg border border-gray-100 mb-8 flex flex-col gap-6">
             <div className="flex items-center gap-2 mb-1 border-b border-gray-200 pb-2">
               <Filter size={18} className="text-gray-500" />
@@ -640,13 +661,13 @@
             </div>
           </div>
           
-          <div className="space-y-4">
+          <div className="border-t border-gray-200">
             {filteredData.length > 0 ? (
-              filteredData.map((announcement) => (
-                <AnnouncementAccordion key={announcement.id} announcement={announcement} />
+              filteredData.map((announcement, index) => (
+                <AnnouncementAccordion key={announcement.id} announcement={announcement} index={index} />
               ))
             ) : (
-              <div className="text-center py-16 text-gray-500 bg-slate-50 rounded-lg border border-gray-100 flex flex-col items-center justify-center">
+              <div className="text-center py-16 text-gray-500 bg-slate-50 border-b border-gray-200 flex flex-col items-center justify-center">
                 <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
                 <p className="text-sm">請嘗試調整您的篩選條件。</p>
               </div>
@@ -737,32 +758,32 @@
     const MembersSection = () => {
       const termsData = [
         {
-          id: 40,
-          title: "第 40 屆成員",
+          id: 42,
+          title: "第 42 屆成員",
           active: true,
           departments: [
-            { name: "會長股", members: ["會長：簡志諭", "副會長：李冠廷"] },
-            { name: "公關股", members: ["股員：方彥婷、曾若寧"] },
-            { name: "活動股", members: ["股員：李奕德"] },
-            { name: "總務股", members: ["股員：張鈞幃、徐秉辰"] },
-            { name: "體育股", members: ["股員：張智閔"] },
-            { name: "美宣股", members: ["股員：郭傲寒、張微訢"] },
-            { name: "器攝股", members: ["股員：謝念祖"] },
+            { name: "會長股", members: ["會長：簡志諭、副會長：李冠廷"] },
+            { name: "公關股", members: ["股長：方彥婷、曾若寧"] },
+            { name: "活動股", members: ["股長：李奕德"] },
+            { name: "總務股", members: ["股長：張鈞幃、徐秉辰"] },
+            { name: "體育股", members: ["股長：張智閔"] },
+            { name: "美宣股", members: ["股長：郭傲寒、張微訢"] },
+            { name: "器攝股", members: ["股長：謝念祖"] },
           ]
         },
         {
-          id: 39,
-          title: "第 39 屆成員",
+          id: 41,
+          title: "第 40 屆成員",
           active: false,
           departments: [
-            { name: "會長股", members: ["會長：林佳泓", "副會長：黃筱喻","執秘：李芷妘"] },
-            { name: "公關股", members: ["股員：李依璇、李家妤"] },
-            { name: "活動股", members: ["股員：林育均、周哲宇"] },
-            { name: "總務股", members: ["股員：張格順、廖頤柔"] },
-            { name: "體育股", members: ["股員：曾新堯"] },
-            { name: "美宣股", members: ["股員：吳奕宏"] },
-            { name: "器攝股", members: ["股員：陳俊宇、蕭徹"] },
-            { name: "學術股", members: ["股員：楊硯程"] },
+            { name: "會長股", members: ["會長：林佳泓、副會長：黃筱喻、執秘：李芷妘"] },
+            { name: "公關股", members: ["股長：李依璇、李家妤"] },
+            { name: "活動股", members: ["股長：林育均、周哲宇"] },
+            { name: "總務股", members: ["股長：張格順、廖頤柔"] },
+            { name: "體育股", members: ["股長：曾新堯"] },
+            { name: "美宣股", members: ["股長：吳奕宏"] },
+            { name: "器攝股", members: ["股長：陳俊宇、蕭徹"] },
+            { name: "學術股", members: ["股長：楊硯程"] },
           ]
         }
       ];
@@ -772,20 +793,22 @@
             <h2 className="text-3xl font-bold text-[#003B71] mb-3">歷屆成員</h2>
             <p className="text-gray-400 text-sm tracking-widest uppercase">Our Team Members</p>
           </div>
-          <div className="space-y-4">
-            {termsData.map((term) => (
-              <MemberAccordion key={term.id} term={term} defaultOpen={term.id === 40} />
+          <div className="border-t border-gray-200">
+            {termsData.map((term, index) => (
+              <MemberAccordion key={term.id} term={term} index={index} defaultOpen={term.id === 40} />
             ))}
           </div>
         </div>
       );
     };
 
-    const MemberAccordion = ({ term, defaultOpen }) => {
+    const MemberAccordion = ({ term, index, defaultOpen }) => {
       const [isOpen, setIsOpen] = useState(defaultOpen);
+      const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+      
       return (
-        <div className="border-b border-gray-200">
-          <button onClick={() => setIsOpen(!isOpen)} className="w-full py-6 flex items-center justify-between bg-white hover:text-[#003B71] transition-colors focus:outline-none group">
+        <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
+          <button onClick={() => setIsOpen(!isOpen)} className="w-full px-4 md:px-6 py-6 flex items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group">
             <div className="flex items-center gap-6">
               <span className={`text-2xl font-bold ${term.active ? 'text-[#003B71]' : 'text-gray-300 group-hover:text-gray-500'}`}>
                 {term.id < 10 ? `0${term.id}` : term.id}
@@ -795,13 +818,13 @@
               </div>
               {term.active && <span className="text-[10px] tracking-wider font-bold text-white bg-[#003B71] px-2 py-1 rounded-sm uppercase">Current</span>}
             </div>
-            <div className={`text-gray-300 transition-transform duration-500 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0'}`}>
+            <div className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
                <ChevronDown size={20} />
             </div>
           </button>
-          <div className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'grid-rows-[1fr] opacity-100 mb-8' : 'grid-rows-[0fr] opacity-0'}`}>
+          <div className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'grid-rows-[1fr] opacity-100 mb-4' : 'grid-rows-[0fr] opacity-0'}`}>
             <div className="overflow-hidden">
-              <div className="pt-4 pb-2">
+              <div className="pt-2 pb-6 px-4 md:px-6">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
                   {term.departments.map((dept, idx) => (
                     <div key={idx} className="group/dept">
@@ -865,25 +888,28 @@
             <p className="text-gray-400 text-sm tracking-widest uppercase">Downloads & Resources</p>
           </div>
           <div className="grid gap-0 border-t border-gray-200">
-            {documents.map((doc) => (
-              <a 
-                key={doc.id} 
-                href={doc.link}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-center justify-between py-6 border-b border-gray-200 hover:bg-gray-50 transition-colors px-4 -mx-4 cursor-pointer"
-              >
-                <div className="flex items-center gap-6">
-                  <div className={`text-xs font-bold px-2 py-1 rounded border ${doc.type === 'PDF' ? 'text-red-600 border-red-200' : 'text-blue-600 border-blue-200'}`}>{doc.type}</div>
-                  <div>
-                    <h3 className="font-medium text-gray-900 text-lg mb-1 group-hover:text-[#003B71] transition-colors">{doc.title}</h3>
-                    <div className="text-xs text-gray-400 flex gap-3">
-                      <span className="flex items-center gap-1"><Calendar size={12}/> {doc.date}</span>
+            {documents.map((doc, index) => {
+              const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+              return (
+                <a 
+                  key={doc.id} 
+                  href={doc.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`group flex items-center justify-between py-6 border-b border-gray-200 hover:bg-slate-100/50 transition-colors px-4 md:px-6 cursor-pointer ${bgColor}`}
+                >
+                  <div className="flex items-center gap-6">
+                    <div className={`text-xs font-bold px-2 py-1 rounded border ${doc.type === 'PDF' ? 'text-red-600 border-red-200' : 'text-blue-600 border-blue-200'}`}>{doc.type}</div>
+                    <div>
+                      <h3 className="font-medium text-gray-900 text-lg mb-1 group-hover:text-[#003B71] transition-colors">{doc.title}</h3>
+                      <div className="text-xs text-gray-400 flex gap-3">
+                        <span className="flex items-center gap-1"><Calendar size={12}/> {doc.date}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         </div>
       );
