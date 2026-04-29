@@ -51,45 +51,8 @@
 <body>
   <div id="root"></div>
 
-  <!-- 使用 data-type="module" 支援 Firebase 模組載入 -->
-  <script type="text/babel" data-type="module">
+  <script type="text/babel">
     const { useState, useEffect, useRef } = React;
-
-    // --- Firebase 模組載入 ---
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    // --- Firebase 初始化設定 ---
-    let app, auth, db, appId = 'default-app-id';
-    try {
-      // 若要在 Google 協作平台上使用，請先到 Firebase 建立專案，並將 Config 填入下方
-      let firebaseConfig = null;
-      /*
-      firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-      };
-      */
-
-      // 偵測是否在預覽環境中（自動注入的變數）
-      if (typeof __firebase_config !== 'undefined') {
-        firebaseConfig = JSON.parse(__firebase_config);
-        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-      }
-
-      if (firebaseConfig) {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-      }
-    } catch (e) {
-      console.error("Firebase 初始化失敗:", e);
-    }
 
     // --- 圖示組件 ---
     const IconWrapper = ({ children, size = 24, className = "" }) => (
@@ -110,7 +73,6 @@
     const Mail = (props) => <IconWrapper {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></IconWrapper>;
     const Bell = (props) => <IconWrapper {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></IconWrapper>;
     const Filter = (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>;
-    const Eye = (props) => <IconWrapper {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -361,16 +323,9 @@
       );
     };
 
-    // --- 公告手風琴組件 (深淺交錯排列 + 真實資料庫點擊數) ---
-    const AnnouncementAccordion = ({ announcement, index, clicks, onToggle }) => {
+    // --- 公告手風琴組件 (深淺交錯排列) ---
+    const AnnouncementAccordion = ({ announcement, index }) => {
       const [isOpen, setIsOpen] = useState(false);
-
-      const handleToggle = () => {
-        if (!isOpen) {
-          onToggle(announcement.id); // 觸發寫入資料庫
-        }
-        setIsOpen(!isOpen);
-      };
 
       // 簡單的文字格式化函數，將網址轉換為可點擊的連結，並處理換行
       const formatContent = (content) => {
@@ -398,38 +353,32 @@
       return (
         <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
           <button 
-            onClick={handleToggle} 
+            onClick={() => setIsOpen(!isOpen)} 
             className="w-full px-4 md:px-6 py-5 flex items-start md:items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group"
           >
             <div className="flex flex-col text-left w-full pr-4 gap-2">
-              <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0">
-                  <Calendar size={14} />
+              <div className="flex items-start md:items-center w-full">
+                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
+                  <Calendar size={14} className="shrink-0" />
                   {announcement.date}
                 </span>
-                <h3 className={`text-lg font-bold transition-colors break-words ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
+                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
                    {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
                    {announcement.title}
                 </h3>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap pl-0 md:pl-32">
                 {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-100/50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
                     {dept}
                   </span>
                 ))}
               </div>
             </div>
             
-            {/* 右側：點擊數與箭頭 */}
-            <div className="flex items-center gap-3 shrink-0 mt-2 md:mt-0">
-              <div className="hidden md:flex items-center gap-1.5 text-xs text-gray-400 font-medium bg-white px-2 py-1 rounded-full shadow-sm border border-gray-100" title="點擊數">
-                <Eye size={14} />
-                <span>{clicks}</span>
-              </div>
-              <div className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
-                 <ChevronDown size={20} />
-              </div>
+            {/* 右側：箭頭 */}
+            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
+               <ChevronDown size={20} />
             </div>
           </button>
           
@@ -438,11 +387,11 @@
           >
             <div className="overflow-hidden">
               <div className="px-4 md:px-6 pt-2 pb-6">
-                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-2">
+                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-32">
                   {formatContent(announcement.content)}
                 </div>
                 {announcement.file && (
-                  <div className="mt-4 ml-1 md:ml-2">
+                  <div className="mt-4 ml-1 md:ml-32">
                     <a 
                       href={announcement.file.link} 
                       target="_blank" 
@@ -464,63 +413,6 @@
     // --- 主要應用程式 ---
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
-      
-      // -- Firebase Auth 與 Firestore 資料狀態 --
-      const [user, setUser] = useState(null);
-      const [clickData, setClickData] = useState({});
-
-      // 1. 初始化 Auth
-      useEffect(() => {
-        if (!auth) return;
-        const initAuth = async () => {
-          try {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-              await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-              await signInAnonymously(auth);
-            }
-          } catch (error) {
-            console.error("Auth init error:", error);
-          }
-        };
-        initAuth();
-        const unsubscribe = onAuthStateChanged(auth, setUser);
-        return () => unsubscribe();
-      }, []);
-
-      // 2. 訂聽 Firestore 公告點擊次數 (需要有 user 才能執行)
-      useEffect(() => {
-        if (!user || !db) return;
-        
-        const clicksRef = collection(db, 'artifacts', appId, 'public', 'data', 'announcement_clicks');
-        const unsubscribe = onSnapshot(clicksRef, (snapshot) => {
-          const data = {};
-          snapshot.forEach(doc => {
-            data[doc.id] = doc.data().clicks || 0;
-          });
-          setClickData(data);
-        }, (error) => {
-          console.error("Fetch clicks error:", error);
-        });
-
-        return () => unsubscribe();
-      }, [user]);
-
-      // 3. 點擊公告時，更新至資料庫
-      const handleAnnouncementClick = async (announcementId) => {
-        if (!user || !db) return;
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'announcement_clicks', String(announcementId));
-        try {
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            await updateDoc(docRef, { clicks: increment(1) });
-          } else {
-            await setDoc(docRef, { clicks: 1 });
-          }
-        } catch (error) {
-          console.error("Update click error:", error);
-        }
-      };
 
       useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -538,9 +430,9 @@
       const renderContent = () => {
         switch (activeTab) {
           case 'intro': 
-            return <IntroSection onNavigate={setActiveTab} clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
+            return <IntroSection onNavigate={setActiveTab} />;
           case 'announcements': 
-            return <AnnouncementsSection clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
+            return <AnnouncementsSection />;
           case 'events': 
             return <EventsSection />;
           case 'history': 
@@ -550,7 +442,7 @@
           case 'docs': 
             return <DocsSection />;
           default: 
-            return <IntroSection onNavigate={setActiveTab} clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
+            return <IntroSection onNavigate={setActiveTab} />;
         }
       };
 
@@ -640,7 +532,7 @@
     }
 
     // --- 1. 主頁區塊 (純視覺輪播 + 5則最新公告) ---
-    const IntroSection = ({ onNavigate, clickData, onAnnouncementClick }) => {
+    const IntroSection = ({ onNavigate }) => {
       // 首頁只顯示最新 5 筆公告
       const recentAnnouncements = announcementsData.slice(0, 5);
 
@@ -672,8 +564,6 @@
                     key={announcement.id} 
                     announcement={announcement} 
                     index={index} 
-                    clicks={clickData[announcement.id] || 0}
-                    onToggle={onAnnouncementClick}
                   />
                 ))}
               </div>
@@ -684,7 +574,7 @@
     };
 
     // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
-    const AnnouncementsSection = ({ clickData, onAnnouncementClick }) => {
+    const AnnouncementsSection = () => {
       const [selectedYears, setSelectedYears] = useState([]);
       const [selectedDepts, setSelectedDepts] = useState([]);
 
@@ -773,8 +663,6 @@
                   key={announcement.id} 
                   announcement={announcement} 
                   index={index} 
-                  clicks={clickData[announcement.id] || 0}
-                  onToggle={onAnnouncementClick}
                 />
               ))
             ) : (
