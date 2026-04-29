@@ -51,8 +51,45 @@
 <body>
   <div id="root"></div>
 
-  <script type="text/babel">
+  <!-- 使用 data-type="module" 支援 Firebase 模組載入 -->
+  <script type="text/babel" data-type="module">
     const { useState, useEffect, useRef } = React;
+
+    // --- Firebase 模組載入 ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // --- Firebase 初始化設定 ---
+    let app, auth, db, appId = 'default-app-id';
+    try {
+      // 若要在 Google 協作平台上使用，請先到 Firebase 建立專案，並將 Config 填入下方
+      let firebaseConfig = null;
+      /*
+      firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+      */
+
+      // 偵測是否在預覽環境中（自動注入的變數）
+      if (typeof __firebase_config !== 'undefined') {
+        firebaseConfig = JSON.parse(__firebase_config);
+        appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+      }
+
+      if (firebaseConfig) {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+      }
+    } catch (e) {
+      console.error("Firebase 初始化失敗:", e);
+    }
 
     // --- 圖示組件 ---
     const IconWrapper = ({ children, size = 24, className = "" }) => (
@@ -324,15 +361,13 @@
       );
     };
 
-    // --- 公告手風琴組件 (深淺交錯排列 + 點擊數) ---
-    const AnnouncementAccordion = ({ announcement, index }) => {
+    // --- 公告手風琴組件 (深淺交錯排列 + 真實資料庫點擊數) ---
+    const AnnouncementAccordion = ({ announcement, index, clicks, onToggle }) => {
       const [isOpen, setIsOpen] = useState(false);
-      // 使用一個基於 ID 計算的預設點擊數，讓它看起來比較逼真且不會在每次渲染時變動
-      const [clicks, setClicks] = useState(announcement.id * 13 + 42);
 
       const handleToggle = () => {
         if (!isOpen) {
-          setClicks(prev => prev + 1); // 點開時增加點擊數
+          onToggle(announcement.id); // 觸發寫入資料庫
         }
         setIsOpen(!isOpen);
       };
@@ -364,22 +399,22 @@
         <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
           <button 
             onClick={handleToggle} 
-            className="w-full px-4 md:px-6 py-5 flex items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group"
+            className="w-full px-4 md:px-6 py-5 flex items-start md:items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group"
           >
             <div className="flex flex-col text-left w-full pr-4 gap-2">
-              <div className="flex items-start md:items-center w-full">
-                <span className="text-sm font-medium text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
-                  <Calendar size={14} className="shrink-0" />
+              <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0">
+                  <Calendar size={14} />
                   {announcement.date}
                 </span>
-                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71]' : 'text-gray-800 group-hover:text-[#003B71]'}`}>
+                <h3 className={`text-lg font-bold transition-colors break-words ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
                    {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
                    {announcement.title}
                 </h3>
               </div>
-              <div className="flex items-center gap-2 flex-wrap pl-0 md:pl-32">
+              <div className="flex items-center gap-2 flex-wrap">
                 {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-100/50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
                     {dept}
                   </span>
                 ))}
@@ -387,7 +422,7 @@
             </div>
             
             {/* 右側：點擊數與箭頭 */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-3 shrink-0 mt-2 md:mt-0">
               <div className="hidden md:flex items-center gap-1.5 text-xs text-gray-400 font-medium bg-white px-2 py-1 rounded-full shadow-sm border border-gray-100" title="點擊數">
                 <Eye size={14} />
                 <span>{clicks}</span>
@@ -403,11 +438,11 @@
           >
             <div className="overflow-hidden">
               <div className="px-4 md:px-6 pt-2 pb-6">
-                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-32">
+                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-2">
                   {formatContent(announcement.content)}
                 </div>
                 {announcement.file && (
-                  <div className="mt-4 ml-1 md:ml-32">
+                  <div className="mt-4 ml-1 md:ml-2">
                     <a 
                       href={announcement.file.link} 
                       target="_blank" 
@@ -430,6 +465,63 @@
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
       
+      // -- Firebase Auth 與 Firestore 資料狀態 --
+      const [user, setUser] = useState(null);
+      const [clickData, setClickData] = useState({});
+
+      // 1. 初始化 Auth
+      useEffect(() => {
+        if (!auth) return;
+        const initAuth = async () => {
+          try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+              await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+              await signInAnonymously(auth);
+            }
+          } catch (error) {
+            console.error("Auth init error:", error);
+          }
+        };
+        initAuth();
+        const unsubscribe = onAuthStateChanged(auth, setUser);
+        return () => unsubscribe();
+      }, []);
+
+      // 2. 訂聽 Firestore 公告點擊次數 (需要有 user 才能執行)
+      useEffect(() => {
+        if (!user || !db) return;
+        
+        const clicksRef = collection(db, 'artifacts', appId, 'public', 'data', 'announcement_clicks');
+        const unsubscribe = onSnapshot(clicksRef, (snapshot) => {
+          const data = {};
+          snapshot.forEach(doc => {
+            data[doc.id] = doc.data().clicks || 0;
+          });
+          setClickData(data);
+        }, (error) => {
+          console.error("Fetch clicks error:", error);
+        });
+
+        return () => unsubscribe();
+      }, [user]);
+
+      // 3. 點擊公告時，更新至資料庫
+      const handleAnnouncementClick = async (announcementId) => {
+        if (!user || !db) return;
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'announcement_clicks', String(announcementId));
+        try {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            await updateDoc(docRef, { clicks: increment(1) });
+          } else {
+            await setDoc(docRef, { clicks: 1 });
+          }
+        } catch (error) {
+          console.error("Update click error:", error);
+        }
+      };
+
       useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, [activeTab]);
@@ -445,13 +537,20 @@
 
       const renderContent = () => {
         switch (activeTab) {
-          case 'intro': return <IntroSection onNavigate={setActiveTab} />;
-          case 'announcements': return <AnnouncementsSection />;
-          case 'events': return <EventsSection />;
-          case 'history': return <HistorySection />;
-          case 'members': return <MembersSection />;
-          case 'docs': return <DocsSection />;
-          default: return <IntroSection onNavigate={setActiveTab} />;
+          case 'intro': 
+            return <IntroSection onNavigate={setActiveTab} clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
+          case 'announcements': 
+            return <AnnouncementsSection clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
+          case 'events': 
+            return <EventsSection />;
+          case 'history': 
+            return <HistorySection />;
+          case 'members': 
+            return <MembersSection />;
+          case 'docs': 
+            return <DocsSection />;
+          default: 
+            return <IntroSection onNavigate={setActiveTab} clickData={clickData} onAnnouncementClick={handleAnnouncementClick} />;
         }
       };
 
@@ -541,7 +640,7 @@
     }
 
     // --- 1. 主頁區塊 (純視覺輪播 + 5則最新公告) ---
-    const IntroSection = ({ onNavigate }) => {
+    const IntroSection = ({ onNavigate, clickData, onAnnouncementClick }) => {
       // 首頁只顯示最新 5 筆公告
       const recentAnnouncements = announcementsData.slice(0, 5);
 
@@ -569,7 +668,13 @@
               </div>
               <div className="border-t border-gray-200">
                 {recentAnnouncements.map((announcement, index) => (
-                  <AnnouncementAccordion key={announcement.id} announcement={announcement} index={index} />
+                  <AnnouncementAccordion 
+                    key={announcement.id} 
+                    announcement={announcement} 
+                    index={index} 
+                    clicks={clickData[announcement.id] || 0}
+                    onToggle={onAnnouncementClick}
+                  />
                 ))}
               </div>
             </section>
@@ -579,7 +684,7 @@
     };
 
     // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
-    const AnnouncementsSection = () => {
+    const AnnouncementsSection = ({ clickData, onAnnouncementClick }) => {
       const [selectedYears, setSelectedYears] = useState([]);
       const [selectedDepts, setSelectedDepts] = useState([]);
 
@@ -664,7 +769,13 @@
           <div className="border-t border-gray-200">
             {filteredData.length > 0 ? (
               filteredData.map((announcement, index) => (
-                <AnnouncementAccordion key={announcement.id} announcement={announcement} index={index} />
+                <AnnouncementAccordion 
+                  key={announcement.id} 
+                  announcement={announcement} 
+                  index={index} 
+                  clicks={clickData[announcement.id] || 0}
+                  onToggle={onAnnouncementClick}
+                />
               ))
             ) : (
               <div className="text-center py-16 text-gray-500 bg-slate-50 border-b border-gray-200 flex flex-col items-center justify-center">
@@ -773,7 +884,7 @@
         },
         {
           id: 41,
-          title: "第 40 屆成員",
+          title: "第 41 屆成員",
           active: false,
           departments: [
             { name: "會長股", members: ["會長：林佳泓、副會長：黃筱喻、執秘：李芷妘"] },
@@ -785,6 +896,21 @@
             { name: "器攝股", members: ["股長：陳俊宇、蕭徹"] },
             { name: "學術股", members: ["股長：楊硯程"] },
           ]
+        },
+        {
+          id: 40,
+          title: "第 40 屆成員",
+          active: false,
+          departments: [
+            { name: "會長股", members: ["會長：胡峯、副會長：楊昀蓁、執秘：劉珈恩"] },
+            { name: "公關股", members: ["股長：謝芮昕、蔡永悳"] },
+            { name: "活動股", members: ["股長：連睿宇、車晴恩"] },
+            { name: "總務股", members: ["股長：方潤祺、陸苡瑄"] },
+            { name: "體育股", members: ["股長：沙煒臻"] },
+            { name: "美宣股", members: ["股長：郭旖晴、黃予昕"] },
+            { name: "器攝股", members: ["股長：葉昰廷、陳冠岳"] },
+            { name: "學術股", members: ["股長：江承軒、譚元騏"] },
+          ]
         }
       ];
       return (
@@ -795,7 +921,7 @@
           </div>
           <div className="border-t border-gray-200">
             {termsData.map((term, index) => (
-              <MemberAccordion key={term.id} term={term} index={index} defaultOpen={term.id === 40} />
+              <MemberAccordion key={term.id} term={term} index={index} defaultOpen={term.active} />
             ))}
           </div>
         </div>
