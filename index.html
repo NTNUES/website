@@ -159,14 +159,10 @@
       },
       {
         id: 5,
-        title: "地球科學系學會第四十三屆正副會長改選選舉公報公布 (更新)",
+        title: "【更新】地球科學系學會第四十三屆正副會長改選選舉公報公布",
         date: "2026/04/14",
         departments: ["選委會"],
-        content: `<gray>2026/04/14</gray>\n更新選舉公報\n選舉人數改為共166人\n\n──────────────────────────────\n\n<gray>2026/04/09</gray>\n地球科學系學會第四十三屆正副會長改選選舉公報已經公布，請點擊下方附檔查閱。`,
-        files: [
-          { name: "新版選舉公報.pdf", link: "https://drive.google.com/file/d/1QgXGz7urypyqtGAr__agFihvY2-lmcjt/view?usp=share_link" },
-          { name: "原版選舉公報.pdf", link: "https://drive.google.com/file/d/1k-FlbJmRYDXBmpMEhBkYEv_WPPqbzRyM/view?usp=share_link" }
-        ]
+        content: `更新選舉公報\n選舉人數改為共166人\n\n[FILE:新版選舉公報.pdf|https://drive.google.com/file/d/1QgXGz7urypyqtGAr__agFihvY2-lmcjt/view?usp=share_link]\n\n──────────────────────────────\n\n<gray>2026/04/09</gray>\n地球科學系學會第四十三屆正副會長改選選舉公報已經公布，請點擊下方附檔查閱。\n\n[FILE:原版選舉公報.pdf|https://drive.google.com/file/d/1k-FlbJmRYDXBmpMEhBkYEv_WPPqbzRyM/view?usp=share_link]`
       },
       {
         id: 6,
@@ -356,6 +352,8 @@
       const formatContent = (content) => {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         const grayRegex = /<gray>(.*?)<\/gray>/g;
+        const fileRegex = /\[FILE:(.*?)\|(.*?)\]/g;
+        
         return content.split('\n').map((line, i) => {
           const grayParts = line.split(grayRegex);
           return (
@@ -364,15 +362,39 @@
                 if (idx % 2 === 1) {
                   return <span key={idx} className="text-gray-400 dark:text-gray-500 text-sm font-medium">{text}</span>;
                 }
-                return text.split(urlRegex).map((part, j) => {
-                  if (part.match(urlRegex)) {
+                
+                const fileParts = text.split(fileRegex);
+                return fileParts.map((part, k) => {
+                  if (k % 3 === 1) { // 檔案名稱
+                    const name = part;
+                    const link = fileParts[k + 1];
                     return (
-                      <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">
-                        {part}
+                      <a 
+                        key={`file-${k}`}
+                        href={link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 my-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"
+                      >
+                        <Download size={16} />
+                        附檔：{name}
                       </a>
                     );
+                  } else if (k % 3 === 2) { // 檔案連結
+                    return null;
                   }
-                  return part;
+                  
+                  // 一般文字
+                  return part.split(urlRegex).map((urlPart, j) => {
+                    if (urlPart.match(urlRegex)) {
+                      return (
+                        <a key={j} href={urlPart} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">
+                          {urlPart}
+                        </a>
+                      );
+                    }
+                    return urlPart;
+                  });
                 });
               })}
               <br />
