@@ -127,9 +127,8 @@
     const announcementsData = [
       {
         id: 16,
-        title: "躲貓貓活動",
+        title: "2026系躲報名開始",
         date: "2026/05/04",
-        eventDate: "2026/05/15",
         departments: ["活動股"],
         content: `想在忙碌課業中放鬆一下嗎？\n一起來躲貓貓吧！\n不只可以紓壓放鬆\n還能找到素未蒙面的同學✨\n在遊戲中認識彼此\n而且還有美味宵夜😋\n邊玩邊吃，快樂直接加倍！\n\n日期: 2026/05/15 星期五\n時間: 18:30-21:30\n地點: E101\n費用:非會員90元/人 會員65元/人\n\n報名表單：\nhttps://forms.gle/tqnUvqnJwNFgg4pa6`,
         file: null
@@ -151,17 +150,6 @@
         file: null
       },
       {
-        id: 3,
-        title: "更新選舉公報",
-        date: "2026/04/14",
-        departments: ["選委會"],
-        content: `更新選舉公報 選舉人數改為共166人`,
-        file: {
-          name: "更新選舉公報.pdf",
-          link: "https://drive.google.com/file/d/1QgXGz7urypyqtGAr__agFihvY2-lmcjt/view?usp=share_link"
-        }
-      },
-      {
         id: 4,
         title: "地球科學系學會第43屆會長改選政見發表",
         date: "2026/04/10",
@@ -171,14 +159,14 @@
       },
       {
         id: 5,
-        title: "地球科學系學會第四十三屆正副會長改選選舉公報公布",
-        date: "2026/04/09",
+        title: "地球科學系學會第四十三屆正副會長改選選舉公報公布 (更新)",
+        date: "2026/04/14",
         departments: ["選委會"],
-        content: `地球科學系學會第四十三屆正副會長改選選舉公報已經公布，請點擊下方附檔查閱。`,
-        file: {
-          name: "選舉公報.pdf",
-          link: "https://drive.google.com/file/d/1k-FlbJmRYDXBmpMEhBkYEv_WPPqbzRyM/view?usp=share_link"
-        }
+        content: `<gray>2026/04/14</gray>\n更新選舉公報\n選舉人數改為共166人\n\n──────────────────────────────\n\n<gray>2026/04/09</gray>\n地球科學系學會第四十三屆正副會長改選選舉公報已經公布，請點擊下方附檔查閱。`,
+        files: [
+          { name: "新版選舉公報.pdf", link: "https://drive.google.com/file/d/1QgXGz7urypyqtGAr__agFihvY2-lmcjt/view?usp=share_link" },
+          { name: "原版選舉公報.pdf", link: "https://drive.google.com/file/d/1k-FlbJmRYDXBmpMEhBkYEv_WPPqbzRyM/view?usp=share_link" }
+        ]
       },
       {
         id: 6,
@@ -361,24 +349,36 @@
     const AnnouncementAccordion = ({ announcement, index }) => {
       const [isOpen, setIsOpen] = useState(false);
 
+      // 支援單一檔案或多檔案陣列
+      const attachments = announcement.files || (announcement.file ? [announcement.file] : []);
+
       // 簡單的文字格式化函數，將網址轉換為可點擊的連結，並處理換行
       const formatContent = (content) => {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
-        return content.split('\n').map((line, i) => (
-          <React.Fragment key={i}>
-            {line.split(urlRegex).map((part, j) => {
-              if (part.match(urlRegex)) {
-                return (
-                  <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">
-                    {part}
-                  </a>
-                );
-              }
-              return part;
-            })}
-            <br />
-          </React.Fragment>
-        ));
+        const grayRegex = /<gray>(.*?)<\/gray>/g;
+        return content.split('\n').map((line, i) => {
+          const grayParts = line.split(grayRegex);
+          return (
+            <React.Fragment key={i}>
+              {grayParts.map((text, idx) => {
+                if (idx % 2 === 1) {
+                  return <span key={idx} className="text-gray-400 dark:text-gray-500 text-sm font-medium">{text}</span>;
+                }
+                return text.split(urlRegex).map((part, j) => {
+                  if (part.match(urlRegex)) {
+                    return (
+                      <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">
+                        {part}
+                      </a>
+                    );
+                  }
+                  return part;
+                });
+              })}
+              <br />
+            </React.Fragment>
+          );
+        });
       };
 
       // 判斷背景顏色 (深淺相間)
@@ -421,20 +421,23 @@
           >
             <div className="overflow-hidden">
               <div className="px-4 md:px-6 pt-2 pb-6">
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] dark:border-blue-400 pl-4 ml-1 md:ml-32">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base ml-1 md:ml-32 whitespace-pre-wrap">
                   {formatContent(announcement.content)}
                 </div>
-                {announcement.file && (
-                  <div className="mt-4 ml-1 md:ml-32">
-                    <a 
-                      href={announcement.file.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"
-                    >
-                      <Download size={16} />
-                      附檔：{announcement.file.name}
-                    </a>
+                {attachments.length > 0 && (
+                  <div className="mt-4 ml-1 md:ml-32 flex flex-wrap gap-3">
+                    {attachments.map((file, idx) => (
+                      <a 
+                        key={idx}
+                        href={file.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"
+                      >
+                        <Download size={16} />
+                        附檔：{file.name}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>
@@ -787,7 +790,8 @@
     // --- 3. 歷史區塊 ---
     const HistorySection = () => {
       const milestones = [
-        { year: '2026', title: '章程改寫與選罷法建立', desc: '本會章程上次修訂已是民國一零四年，修改不合時宜的章程，以及將關於選舉部分另外頒布選罷法，以利未來學會運作。' }
+        { year: '2026', title: '章程改寫與選罷法建立', desc: '本會章程上次修訂已是民國一零四年，修改不合時宜的章程，以及將關於選舉部分另外頒布選罷法，以利未來學會運作。' },
+        { year: '2023', title: '榮獲全校社團評鑑特優', desc: '在全體幹部的努力下，我們的活動品質與組織運作獲得校方高度肯定。' },
       ];
       return (
         <div className="max-w-2xl mx-auto px-6 pt-12 fade-in-up">
