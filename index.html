@@ -7,6 +7,11 @@
   
   <!-- 引入 Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // 啟用 class-based 深色模式
+    }
+  </script>
   
   <!-- 引入 React 和 ReactDOM -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -24,6 +29,13 @@
       font-family: "Noto Sans TC", "Microsoft JhengHei", "Heiti TC", sans-serif; 
       background-color: #ffffff;
       color: #1a1a1a;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 深色模式全局背景與文字色 */
+    html.dark body {
+      background-color: #111827; 
+      color: #f3f4f6;
     }
 
     .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -45,6 +57,9 @@
     /* 自定義 checkbox 顏色 */
     input[type="checkbox"] {
       accent-color: #003B71;
+    }
+    html.dark input[type="checkbox"] {
+      accent-color: #60a5fa;
     }
   </style>
 </head>
@@ -73,6 +88,8 @@
     const Mail = (props) => <IconWrapper {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></IconWrapper>;
     const Bell = (props) => <IconWrapper {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></IconWrapper>;
     const Filter = (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>;
+    const Sun = (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></IconWrapper>;
+    const Moon = (props) => <IconWrapper {...props}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -282,7 +299,7 @@
       };
 
       return (
-        <div className="relative w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden mb-12 group bg-slate-100 cursor-pointer">
+        <div className="relative w-full h-[300px] md:h-[500px] lg:h-[600px] overflow-hidden mb-12 group bg-slate-100 dark:bg-gray-800 cursor-pointer">
           <div 
             className="w-full h-full flex transition-transform duration-700 ease-out"
             style={{ transform: `translateX(-${current * 100}%)` }}
@@ -344,7 +361,7 @@
             {line.split(urlRegex).map((part, j) => {
               if (part.match(urlRegex)) {
                 return (
-                  <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">
+                  <a key={j} href={part} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">
                     {part}
                   </a>
                 );
@@ -357,28 +374,28 @@
       };
 
       // 判斷背景顏色 (深淺相間)
-      const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+      const bgColor = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
 
       return (
-        <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
+        <div className={`border-b border-gray-200 dark:border-gray-700 transition-colors ${bgColor}`}>
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="w-full px-4 md:px-6 py-5 flex items-start md:items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group"
+            className="w-full px-4 md:px-6 py-5 flex items-start md:items-center justify-between hover:bg-slate-100/50 dark:hover:bg-gray-800 transition-colors focus:outline-none group"
           >
             <div className="flex flex-col text-left w-full pr-4 gap-2">
               <div className="flex items-start md:items-center w-full">
-                <span className="text-sm text-gray-500 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
+                <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
                   <Calendar size={14} className="shrink-0" />
                   {announcement.date}
                 </span>
-                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71]' : 'text-gray-800'}`}>
-                   {announcement.eventDate && <span className="mr-2 text-[#003B71]">{announcement.eventDate}</span>}
+                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71] dark:text-blue-400' : 'text-gray-800 dark:text-gray-200 group-hover:text-[#003B71] dark:group-hover:text-blue-400'}`}>
+                   {announcement.eventDate && <span className="mr-2 text-[#003B71] dark:text-blue-400">{announcement.eventDate}</span>}
                    {announcement.title}
                 </h3>
               </div>
               <div className="flex items-center gap-2 flex-wrap pl-0 md:pl-32">
                 {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-xs font-medium text-[#003B71] bg-blue-100/50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide whitespace-nowrap">
+                  <span key={idx} className="text-xs font-medium text-[#003B71] dark:text-blue-300 bg-blue-100/50 dark:bg-blue-900/40 px-2 py-0.5 rounded border border-blue-100 dark:border-blue-800 uppercase tracking-wide whitespace-nowrap">
                     {dept}
                   </span>
                 ))}
@@ -386,7 +403,7 @@
             </div>
             
             {/* 右側：箭頭 */}
-            <div className={`text-gray-400 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
+            <div className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180 text-[#003B71] dark:text-blue-400' : 'rotate-0 group-hover:text-[#003B71] dark:group-hover:text-blue-400'}`}>
                <ChevronDown size={20} />
             </div>
           </button>
@@ -396,7 +413,7 @@
           >
             <div className="overflow-hidden">
               <div className="px-4 md:px-6 pt-2 pb-6">
-                <div className="text-gray-700 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] pl-4 ml-1 md:ml-32">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base border-l-2 border-[#003B71] dark:border-blue-400 pl-4 ml-1 md:ml-32">
                   {formatContent(announcement.content)}
                 </div>
                 {announcement.file && (
@@ -405,7 +422,7 @@
                       href={announcement.file.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:text-[#003B71] hover:border-[#003B71] transition-colors shadow-sm"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"
                     >
                       <Download size={16} />
                       附檔：{announcement.file.name}
@@ -422,6 +439,18 @@
     // --- 主要應用程式 ---
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
+      
+      // 深色模式狀態管理
+      const [isDarkMode, setIsDarkMode] = useState(false);
+
+      // 初始化時檢查系統偏好或本地儲存 (此處為了簡化，預設為淺色，使用者點擊按鈕切換)
+      useEffect(() => {
+        if (isDarkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }, [isDarkMode]);
 
       useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -456,32 +485,41 @@
       };
 
       return (
-        <div className="min-h-screen bg-white text-[#1a1a1a] pb-12 flex flex-col">
+        <div className="min-h-screen bg-white dark:bg-gray-900 text-[#1a1a1a] dark:text-gray-100 pb-12 flex flex-col transition-colors duration-300">
           {/* Header 區域 */}
-          <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+          <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
             {/* 主要標題區 */}
             <div className="py-4">
               <div className="max-w-5xl mx-auto px-6">
-                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
                     <div className="flex items-center gap-4">
                       {/* Logo 圖片 */}
                       <img 
                         src="https://drive.google.com/thumbnail?id=1ujWbQzO9oNH5ZV2_VNS4ZXo8UiSkTyeA&sz=w400" 
                         alt="系學會 Logo" 
-                        className="w-16 h-16 rounded-full object-cover shadow-sm border border-gray-100 bg-white"
+                        className="w-16 h-16 rounded-full object-cover shadow-sm border border-gray-100 dark:border-gray-700 bg-white"
                         referrerPolicy="no-referrer"
                       />
                       <div className="flex flex-col items-center md:items-start">
-                        <span className="text-xs font-medium text-gray-500 tracking-[0.15em] uppercase font-bold">National Taiwan Normal University</span>
-                        <h1 className="text-xl md:text-2xl font-bold text-[#003B71] tracking-wide">地球科學系學會</h1>
+                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 tracking-[0.15em] uppercase font-bold">National Taiwan Normal University</span>
+                        <h1 className="text-xl md:text-2xl font-bold text-[#003B71] dark:text-white tracking-wide">地球科學系學會</h1>
                       </div>
                     </div>
+                    
+                    {/* 深淺模式切換按鈕 */}
+                    <button 
+                      onClick={() => setIsDarkMode(!isDarkMode)} 
+                      className="p-2.5 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors shadow-sm focus:outline-none"
+                      title={isDarkMode ? "切換至淺色模式" : "切換至深色模式"}
+                    >
+                      {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
                  </div>
               </div>
             </div>
 
             {/* 導覽列 */}
-            <div className="border-t border-gray-100">
+            <div className="border-t border-gray-100 dark:border-gray-800">
               <div className="max-w-5xl mx-auto px-6">
                 <nav className="flex justify-center md:justify-start space-x-6 md:space-x-8 overflow-x-auto scrollbar-hide">
                   {navItems.map((item) => (
@@ -489,7 +527,9 @@
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
                       className={`py-4 text-sm tracking-widest transition-all duration-300 border-b-2 font-medium whitespace-nowrap
-                        ${activeTab === item.id ? 'border-[#003B71] text-[#003B71]' : 'border-transparent text-gray-400 hover:text-gray-800'}`}
+                        ${activeTab === item.id 
+                          ? 'border-[#003B71] text-[#003B71] dark:border-blue-400 dark:text-blue-400' 
+                          : 'border-transparent text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}
                     >
                       {item.label}
                     </button>
@@ -505,31 +545,31 @@
           </main>
 
           {/* 頁尾 */}
-          <footer className="bg-slate-50 border-t border-gray-200 mt-20 pt-16 pb-12">
+          <footer className="bg-slate-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-20 pt-16 pb-12 transition-colors duration-300">
             <div className="max-w-5xl mx-auto px-6 text-center">
               <div className="flex flex-col items-center gap-8">
                 {/* Logo & Copyright */}
                 <div>
                   <div className="mb-2">
-                    <span className="font-bold text-[#003B71] text-xl tracking-wide">NTNU Earth Sciences</span>
+                    <span className="font-bold text-[#003B71] dark:text-blue-400 text-xl tracking-wide">NTNU Earth Sciences</span>
                   </div>
-                  <p className="text-sm text-gray-500 mb-1 font-medium">國立臺灣師範大學 地球科學系學會</p>
-                  <p className="text-xs text-gray-400 tracking-wider">© {new Date().getFullYear()} All Rights Reserved.</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 font-medium">國立臺灣師範大學 地球科學系學會</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 tracking-wider">© {new Date().getFullYear()} All Rights Reserved.</p>
                 </div>
 
                 {/* Contact Info */}
                 <div className="space-y-4 flex flex-col items-center w-full max-w-md">
-                  <h4 className="font-bold text-gray-900 tracking-wide uppercase text-sm border-b border-gray-200 pb-2 inline-block">聯絡我們 Contact Us</h4>
-                  <div className="space-y-3 text-sm text-gray-600 items-center w-full pl-0">
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100 tracking-wide uppercase text-sm border-b border-gray-200 dark:border-gray-600 pb-2 inline-block">聯絡我們 Contact Us</h4>
+                  <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300 items-center w-full pl-0">
                     <p>地址 (11677) 台北市文山區汀州路四段88號</p>
                     <p>
-                      <a href="mailto:ntnues42@gmail.com" className="hover:text-[#003B71] transition-colors">email ntnues42@gmail.com</a>
+                      <a href="mailto:ntnues42@gmail.com" className="hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">email ntnues42@gmail.com</a>
                     </p>
                     <p>
-                      <a href="https://www.facebook.com/ntnuessa" target="_blank" rel="noreferrer" className="hover:text-[#003B71] transition-colors">Facebook 國立臺灣師範大學 地球科學系學會</a>
+                      <a href="https://www.facebook.com/ntnuessa" target="_blank" rel="noreferrer" className="hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">Facebook 國立臺灣師範大學 地球科學系學會</a>
                     </p>
                     <p>
-                      <a href="https://instagram.com/ntnu_es" target="_blank" rel="noreferrer" className="hover:text-[#003B71] transition-colors">IG ntnu_es</a>
+                      <a href="https://instagram.com/ntnu_es" target="_blank" rel="noreferrer" className="hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">IG ntnu_es</a>
                     </p>
                   </div>
                 </div>
@@ -553,21 +593,21 @@
           <div className="max-w-4xl mx-auto px-6 space-y-20 pb-12">
             {/* 最新公告區塊 */}
             <section className="pt-4 -mt-10 relative z-20">
-               <div className="mb-6 flex items-center justify-between border-b border-gray-200 pb-3">
+               <div className="mb-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-3">
                 <div className="flex items-center gap-2">
-                  <Bell size={24} className="text-[#003B71]" />
-                  <h3 className="text-2xl font-bold text-gray-900">最新公告</h3>
+                  <Bell size={24} className="text-[#003B71] dark:text-blue-400" />
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">最新公告</h3>
                 </div>
                 {announcementsData.length > 5 && (
                   <button 
                     onClick={() => onNavigate('announcements')} 
-                    className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1"
+                    className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors flex items-center gap-1"
                   >
                     查看全部 <ArrowRight size={16} />
                   </button>
                 )}
               </div>
-              <div className="border-t border-gray-200">
+              <div className="border-t border-gray-200 dark:border-gray-700">
                 {recentAnnouncements.map((announcement, index) => (
                   <AnnouncementAccordion 
                     key={announcement.id} 
@@ -614,30 +654,30 @@
       return (
         <div className="max-w-4xl mx-auto px-6 pt-12 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] mb-3">公告</h2>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">Announcements</p>
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">公告</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Announcements</p>
           </div>
 
           {/* 篩選器 UI */}
-          <div className="bg-slate-50 p-6 rounded-lg border border-gray-100 mb-8 flex flex-col gap-6">
-            <div className="flex items-center gap-2 mb-1 border-b border-gray-200 pb-2">
-              <Filter size={18} className="text-gray-500" />
-              <h4 className="text-sm font-bold text-gray-700 tracking-wide">篩選條件</h4>
-              <span className="text-xs text-gray-400 ml-2">(未勾選時顯示全部)</span>
+          <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mb-8 flex flex-col gap-6 transition-colors">
+            <div className="flex items-center gap-2 mb-1 border-b border-gray-200 dark:border-gray-600 pb-2">
+              <Filter size={18} className="text-gray-500 dark:text-gray-400" />
+              <h4 className="text-sm font-bold text-gray-700 dark:text-gray-200 tracking-wide">篩選條件</h4>
+              <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">(未勾選時顯示全部)</span>
             </div>
             
             {/* 年份勾選區 */}
             <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
-              <span className="text-sm font-bold text-[#003B71] w-12 shrink-0 pt-0.5">年份</span>
+              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">年份</span>
               <div className="flex flex-wrap gap-4">
                 {years.map(year => (
-                  <label key={year} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-[#003B71] transition-colors">
+                  <label key={year} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
                     <input 
                       type="checkbox" 
                       value={year}
                       checked={selectedYears.includes(year)}
                       onChange={() => handleYearChange(year)}
-                      className="w-4 h-4 rounded border-gray-300 text-[#003B71] focus:ring-[#003B71] cursor-pointer"
+                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
                     />
                     {year}
                   </label>
@@ -647,16 +687,16 @@
 
             {/* 股別勾選區 */}
             <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
-              <span className="text-sm font-bold text-[#003B71] w-12 shrink-0 pt-0.5">股別</span>
+              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">股別</span>
               <div className="flex flex-wrap gap-4">
                 {depts.map(dept => (
-                  <label key={dept} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-[#003B71] transition-colors">
+                  <label key={dept} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
                     <input 
                       type="checkbox" 
                       value={dept}
                       checked={selectedDepts.includes(dept)}
                       onChange={() => handleDeptChange(dept)}
-                      className="w-4 h-4 rounded border-gray-300 text-[#003B71] focus:ring-[#003B71] cursor-pointer"
+                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
                     />
                     {dept}
                   </label>
@@ -665,7 +705,7 @@
             </div>
           </div>
           
-          <div className="border-t border-gray-200">
+          <div className="border-t border-gray-200 dark:border-gray-700">
             {filteredData.length > 0 ? (
               filteredData.map((announcement, index) => (
                 <AnnouncementAccordion 
@@ -675,7 +715,7 @@
                 />
               ))
             ) : (
-              <div className="text-center py-16 text-gray-500 bg-slate-50 border-b border-gray-200 flex flex-col items-center justify-center">
+              <div className="text-center py-16 text-gray-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center transition-colors">
                 <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
                 <p className="text-sm">請嘗試調整您的篩選條件。</p>
               </div>
@@ -690,14 +730,14 @@
       return (
         <div className="max-w-5xl mx-auto px-6 pt-12 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] mb-3">活動回顧</h2>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">Our Events</p>
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">活動回顧</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Our Events</p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 md:gap-10">
             {eventsData.map((event) => (
-              <div key={event.id} className="bg-white group flex flex-col h-full">
-                <div className="aspect-video w-full overflow-hidden rounded-lg mb-6 bg-gray-100 shadow-md relative">
+              <div key={event.id} className="bg-white dark:bg-gray-800 group flex flex-col h-full rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
+                <div className="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-700 relative">
                    <img 
                       src={event.image} 
                       alt={event.title} 
@@ -709,21 +749,21 @@
                       }}
                     />
                 </div>
-                <div className="flex-grow">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xs font-bold text-[#003B71] bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase tracking-wide">
+                <div className="flex-grow p-6">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-xs font-bold text-[#003B71] dark:text-blue-300 bg-blue-50 dark:bg-blue-900/40 px-2 py-1 rounded border border-blue-100 dark:border-blue-800 uppercase tracking-wide">
                       Event
                     </span>
-                    <span className="text-sm font-medium text-gray-400 flex items-center gap-1">
+                    <span className="text-sm font-medium text-gray-400 dark:text-gray-400 flex items-center gap-1">
                       <Calendar size={14} />
                       {event.date}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#003B71] transition-colors">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-[#003B71] dark:group-hover:text-blue-400 transition-colors">
                     {event.title}
                   </h3>
-                  {event.subtitle && <p className="text-sm font-bold text-blue-600 mb-3">{event.subtitle}</p>}
-                  <p className="text-gray-600 leading-relaxed text-justify">
+                  {event.subtitle && <p className="text-sm font-bold text-blue-600 dark:text-blue-400 mb-3">{event.subtitle}</p>}
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-justify">
                     {event.desc}
                   </p>
                 </div>
@@ -743,17 +783,17 @@
       return (
         <div className="max-w-2xl mx-auto px-6 pt-12 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] mb-3">輝煌歷史</h2>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">History & Milestones</p>
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">輝煌歷史</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">History & Milestones</p>
           </div>
-          <div className="space-y-12 border-l border-gray-200 ml-4 pl-8 md:pl-12 py-2">
+          <div className="space-y-12 border-l border-gray-200 dark:border-gray-700 ml-4 pl-8 md:pl-12 py-2">
             {milestones.map((item, index) => (
               <div key={index} className="relative group">
-                <div className="absolute -left-[41px] md:-left-[57px] top-2 w-3 h-3 rounded-full bg-white border-2 border-[#003B71] group-hover:bg-[#003B71] transition-colors"></div>
+                <div className="absolute -left-[41px] md:-left-[57px] top-2 w-3 h-3 rounded-full bg-white dark:bg-gray-900 border-2 border-[#003B71] dark:border-blue-400 group-hover:bg-[#003B71] dark:group-hover:bg-blue-400 transition-colors"></div>
                 <div className="transition-all">
-                  <span className="text-[#003B71] font-bold text-xl block mb-2">{item.year}</span>
-                  <h3 className="text-lg font-bold text-gray-800 mb-3">{item.title}</h3>
-                  <p className="text-gray-600 text-base leading-relaxed">{item.desc}</p>
+                  <span className="text-[#003B71] dark:text-blue-400 font-bold text-xl block mb-2">{item.year}</span>
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3">{item.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -813,10 +853,10 @@
       return (
         <div className="max-w-4xl mx-auto px-6 pt-12 space-y-8 fade-in-up">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] mb-3">歷屆成員</h2>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">Our Team Members</p>
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">歷屆成員</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Our Team Members</p>
           </div>
-          <div className="border-t border-gray-200">
+          <div className="border-t border-gray-200 dark:border-gray-700">
             {termsData.map((term, index) => (
               <MemberAccordion key={term.id} term={term} index={index} defaultOpen={term.active} />
             ))}
@@ -827,21 +867,21 @@
 
     const MemberAccordion = ({ term, index, defaultOpen }) => {
       const [isOpen, setIsOpen] = useState(defaultOpen);
-      const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+      const bgColor = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
       
       return (
-        <div className={`border-b border-gray-200 transition-colors ${bgColor}`}>
-          <button onClick={() => setIsOpen(!isOpen)} className="w-full px-4 md:px-6 py-6 flex items-center justify-between hover:bg-slate-100/50 transition-colors focus:outline-none group">
+        <div className={`border-b border-gray-200 dark:border-gray-700 transition-colors ${bgColor}`}>
+          <button onClick={() => setIsOpen(!isOpen)} className="w-full px-4 md:px-6 py-6 flex items-center justify-between hover:bg-slate-100/50 dark:hover:bg-gray-800 transition-colors focus:outline-none group">
             <div className="flex items-center gap-6">
-              <span className={`text-2xl font-bold ${term.active ? 'text-[#003B71]' : 'text-gray-300 group-hover:text-gray-500'}`}>
+              <span className={`text-2xl font-bold ${term.active ? 'text-[#003B71] dark:text-blue-400' : 'text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400'}`}>
                 {term.id < 10 ? `0${term.id}` : term.id}
               </span>
               <div className="text-left">
-                <h3 className="text-lg font-medium text-gray-800 group-hover:text-[#003B71] transition-colors">{term.title}</h3>
+                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 group-hover:text-[#003B71] dark:group-hover:text-blue-400 transition-colors">{term.title}</h3>
               </div>
-              {term.active && <span className="text-[10px] tracking-wider font-bold text-white bg-[#003B71] px-2 py-1 rounded-sm uppercase">Current</span>}
+              {term.active && <span className="text-[10px] tracking-wider font-bold text-white bg-[#003B71] dark:bg-blue-600 px-2 py-1 rounded-sm uppercase">Current</span>}
             </div>
-            <div className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#003B71]' : 'rotate-0 group-hover:text-[#003B71]'}`}>
+            <div className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#003B71] dark:text-blue-400' : 'rotate-0 group-hover:text-[#003B71] dark:group-hover:text-blue-400'}`}>
                <ChevronDown size={20} />
             </div>
           </button>
@@ -851,10 +891,10 @@
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-8">
                   {term.departments.map((dept, idx) => (
                     <div key={idx} className="group/dept">
-                      <h4 className="font-bold text-gray-900 mb-3 text-sm tracking-wide border-b border-gray-100 pb-2 flex items-center gap-2">{dept.name}</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-200 mb-3 text-sm tracking-wide border-b border-gray-100 dark:border-gray-700 pb-2 flex items-center gap-2">{dept.name}</h4>
                       <ul className="space-y-2">
                         {dept.members.map((member, mIdx) => (
-                          <li key={mIdx} className="text-gray-500 text-sm pl-1">{member}</li>
+                          <li key={mIdx} className="text-gray-500 dark:text-gray-400 text-sm pl-1">{member}</li>
                         ))}
                       </ul>
                     </div>
@@ -907,25 +947,25 @@
       return (
         <div className="max-w-4xl mx-auto px-6 pt-12 fade-in-up">
            <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] mb-3">相關文件</h2>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">Downloads & Resources</p>
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">相關文件</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Downloads & Resources</p>
           </div>
-          <div className="grid gap-0 border-t border-gray-200">
+          <div className="grid gap-0 border-t border-gray-200 dark:border-gray-700">
             {documents.map((doc, index) => {
-              const bgColor = index % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+              const bgColor = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
               return (
                 <a 
                   key={doc.id} 
                   href={doc.link}
                   target="_blank"
                   rel="noreferrer"
-                  className={`group flex items-center justify-between py-6 border-b border-gray-200 hover:bg-slate-100/50 transition-colors px-4 md:px-6 cursor-pointer ${bgColor}`}
+                  className={`group flex items-center justify-between py-6 border-b border-gray-200 dark:border-gray-700 hover:bg-slate-100/50 dark:hover:bg-gray-800 transition-colors px-4 md:px-6 cursor-pointer ${bgColor}`}
                 >
                   <div className="flex items-center gap-6">
-                    <div className={`text-xs font-bold px-2 py-1 rounded border ${doc.type === 'PDF' ? 'text-red-600 border-red-200' : 'text-blue-600 border-blue-200'}`}>{doc.type}</div>
+                    <div className={`text-xs font-bold px-2 py-1 rounded border ${doc.type === 'PDF' ? 'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800' : 'text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800'}`}>{doc.type}</div>
                     <div>
-                      <h3 className="font-medium text-gray-900 text-lg mb-1 group-hover:text-[#003B71] transition-colors">{doc.title}</h3>
-                      <div className="text-xs text-gray-400 flex gap-3">
+                      <h3 className="font-medium text-gray-900 dark:text-gray-200 text-lg mb-1 group-hover:text-[#003B71] dark:group-hover:text-blue-400 transition-colors">{doc.title}</h3>
+                      <div className="text-xs text-gray-400 dark:text-gray-500 flex gap-3">
                         <span className="flex items-center gap-1"><Calendar size={12}/> {doc.date}</span>
                       </div>
                     </div>
