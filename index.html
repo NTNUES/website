@@ -498,29 +498,29 @@
           <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors duration-300">
             {/* 主要標題區 */}
             <div className="py-4">
-              <div className="max-w-5xl mx-auto px-6">
-                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-                    <div className="flex items-center gap-4">
+              <div className="max-w-5xl mx-auto px-4 md:px-6">
+                 <div className="flex items-center justify-between gap-2 md:gap-4 w-full">
+                    <div className="flex items-center gap-3 md:gap-4 min-w-0">
                       {/* Logo 圖片 */}
                       <img 
                         src="https://drive.google.com/thumbnail?id=1ujWbQzO9oNH5ZV2_VNS4ZXo8UiSkTyeA&sz=w400" 
                         alt="系學會 Logo" 
-                        className="w-16 h-16 rounded-full object-cover shadow-sm border border-gray-100 dark:border-gray-700 bg-white"
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover shadow-sm border border-gray-100 dark:border-gray-700 bg-white shrink-0"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="flex flex-col items-center md:items-start">
-                        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 tracking-[0.15em] uppercase font-bold">National Taiwan Normal University</span>
-                        <h1 className="text-xl md:text-2xl font-bold text-[#003B71] dark:text-white tracking-wide">地球科學系學會</h1>
+                      <div className="flex flex-col items-start min-w-0">
+                        <span className="text-[9px] sm:text-xs font-medium text-gray-500 dark:text-gray-400 tracking-[0.05em] sm:tracking-[0.15em] uppercase font-bold truncate w-full">National Taiwan Normal University</span>
+                        <h1 className="text-base sm:text-xl md:text-2xl font-bold text-[#003B71] dark:text-white tracking-wide truncate w-full">地球科學系學會</h1>
                       </div>
                     </div>
                     
                     {/* 深淺模式切換按鈕 */}
                     <button 
                       onClick={() => setIsDarkMode(!isDarkMode)} 
-                      className="p-2.5 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors shadow-sm focus:outline-none"
+                      className="p-2 md:p-2.5 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors shadow-sm focus:outline-none shrink-0"
                       title={isDarkMode ? "切換至淺色模式" : "切換至深色模式"}
                     >
-                      {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                      {isDarkMode ? <Sun size={20} className="w-4 h-4 md:w-5 md:h-5" /> : <Moon size={20} className="w-4 h-4 md:w-5 md:h-5" />}
                     </button>
                  </div>
               </div>
