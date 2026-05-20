@@ -516,15 +516,27 @@
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
       
-      // 深色模式狀態管理
-      const [isDarkMode, setIsDarkMode] = useState(false);
+      // 深色模式狀態管理 (加入 localStorage 記憶功能)
+      const [isDarkMode, setIsDarkMode] = useState(() => {
+        // 初始化時從 localStorage 讀取偏好設定
+        if (typeof window !== 'undefined' && window.localStorage) {
+          return localStorage.getItem('theme') === 'dark';
+        }
+        return false;
+      });
 
-      // 初始化時檢查系統偏好或本地儲存 (此處為了簡化，預設為淺色，使用者點擊按鈕切換)
+      // 當深色模式改變時，同步更新 HTML 的 class 與 localStorage
       useEffect(() => {
         if (isDarkMode) {
           document.documentElement.classList.add('dark');
+          if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('theme', 'dark');
+          }
         } else {
           document.documentElement.classList.remove('dark');
+          if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('theme', 'light');
+          }
         }
       }, [isDarkMode]);
 
