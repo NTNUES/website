@@ -1013,14 +1013,13 @@
       );
     };
 
-    // --- 5. 文件區塊 ---
+    // --- 5. 文件區塊 (表格清單形式) ---
     const DocsSection = () => {
       const documents = [
         { 
           id: 1, 
           title: '國立臺灣師範大學地球科學系系學會組織章程', 
           date: '2026/03/06', 
-          size: '預覽', 
           type: 'PDF',
           link: 'https://drive.google.com/file/d/1p-AgW4ILvqgQvEzNgwse6U_dK5tI_Wic/view?usp=share_link'
         },
@@ -1028,7 +1027,6 @@
           id: 2, 
           title: '國立臺灣師範大學地球科學系學會選舉罷免辦法', 
           date: '2026/03/06', 
-          size: '預覽', 
           type: 'PDF',
           link: 'https://drive.google.com/file/d/1FHdofkYVqn_7jLkSE5q5KWzYF_GTj3rx/view?usp=share_link'
         },
@@ -1036,7 +1034,6 @@
           id: 3, 
           title: '國立臺灣師範大學地球科學系學會臨時會員大會召開注意事項', 
           date: '2026/04/29', 
-          size: '預覽', 
           type: 'WORD',
           link: 'https://docs.google.com/document/d/1YP4FTZRll-wUM12__GGUIOSaLOqHANGe/edit?usp=share_link&ouid=117996118354754923280&rtpof=true&sd=true'
         },
@@ -1044,37 +1041,71 @@
           id: 4, 
           title: '國立臺灣師範大學地球科學系學會正副會長罷免注意事項', 
           date: '2026/04/29', 
-          size: '預覽', 
           type: 'WORD',
           link: 'https://docs.google.com/document/d/1bv2WwCIX5RMNFuGc8wEaTwsbd-6kTibz/edit?usp=share_link&ouid=117996118354754923280&rtpof=true&sd=true'
         }
-        
       ];
+
       return (
-        <div className="max-w-4xl mx-auto px-6 pt-12 fade-in-up">
-           <div className="mb-12 text-center">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-12 fade-in-up">
+           <div className="mb-10 text-center">
             <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">相關文件</h2>
             <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Downloads & Resources</p>
           </div>
-          <div className="grid gap-0 border-t border-gray-200 dark:border-gray-700">
+          
+          {/* 表格標題列 (僅在電腦版顯示) */}
+          <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
+            <div className="w-32 text-center shrink-0">更新日期</div>
+            <div className="flex-1 text-center">文件名稱</div>
+            <div className="w-24 text-center shrink-0">文件格式</div>
+            <div className="w-28 text-center shrink-0">檔案下載</div>
+          </div>
+
+          {/* 文件列表區 */}
+          <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
             {documents.map((doc, index) => {
-              const bgColor = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
+              const formattedDate = doc.date.replace(/\//g, '-');
+              const tagBgColor = doc.type === 'PDF' ? "bg-red-600" : "bg-blue-600";
+              const isEven = index % 2 === 0;
+              const rowBg = isEven ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
+
               return (
                 <a 
                   key={doc.id} 
                   href={doc.link}
                   target="_blank"
                   rel="noreferrer"
-                  className={`group flex items-center justify-between py-6 border-b border-gray-200 dark:border-gray-700 hover:bg-slate-100/50 dark:hover:bg-gray-800 transition-colors px-4 md:px-6 cursor-pointer ${bgColor}`}
+                  className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors group gap-2 md:gap-0 border-b border-gray-200 dark:border-gray-700 hover:bg-blue-50/50 dark:hover:bg-gray-800/80 ${rowBg}`}
                 >
-                  <div className="flex items-center gap-6">
-                    <div className={`w-14 text-center shrink-0 text-xs font-bold px-2 py-1 rounded border ${doc.type === 'PDF' ? 'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800' : 'text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800'}`}>{doc.type}</div>
-                    <div>
-                      <h3 className="font-medium text-gray-900 dark:text-gray-200 text-lg mb-1 group-hover:text-[#003B71] dark:group-hover:text-blue-400 transition-colors">{doc.title}</h3>
-                      <div className="text-xs text-gray-400 dark:text-gray-500 flex gap-3">
-                        <span className="flex items-center gap-1"><Calendar size={12}/> {doc.date}</span>
-                      </div>
-                    </div>
+                  {/* 日期區塊 */}
+                  <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
+                     <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>
+                     {formattedDate}
+                  </div>
+                  
+                  {/* 標題區塊 */}
+                  <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4 flex flex-wrap items-center gap-y-1">
+                     <span className="group-hover:underline leading-snug break-all">{doc.title}</span>
+                  </div>
+
+                  {/* 文件格式區塊 */}
+                  <div className="w-full md:w-24 text-sm text-gray-600 dark:text-gray-400 md:text-center shrink-0 flex items-center mt-1 md:mt-0">
+                     <div className="flex items-center md:block w-full md:w-auto md:mx-auto">
+                       <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">格式</span>
+                       <span className={`${tagBgColor} text-white text-[11px] px-2 py-0.5 rounded-sm tracking-wider inline-block`}>
+                          {doc.type}
+                       </span>
+                     </div>
+                  </div>
+                  
+                  {/* 下載連結區塊 */}
+                  <div className="w-full md:w-28 text-sm text-gray-600 dark:text-gray-400 md:text-center shrink-0 flex items-center justify-between md:justify-center mt-1 md:mt-0">
+                     <div className="flex items-center md:block w-full">
+                       <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">檔案</span>
+                       <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#003B71] dark:group-hover:text-blue-400 group-hover:border-[#003B71] dark:group-hover:border-blue-400 transition-colors shadow-sm ml-auto md:ml-0 md:mx-auto">
+                         <Download size={14} /> 點此下載
+                       </span>
+                     </div>
                   </div>
                 </a>
               );
