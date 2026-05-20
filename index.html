@@ -90,6 +90,7 @@
     const Filter = (props) => <IconWrapper {...props}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></IconWrapper>;
     const Sun = (props) => <IconWrapper {...props}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></IconWrapper>;
     const Moon = (props) => <IconWrapper {...props}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></IconWrapper>;
+    const Paperclip = (props) => <IconWrapper {...props}><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></IconWrapper>;
 
     // --- 資料整合區 (方便管理) ---
     const eventsData = [
@@ -384,7 +385,7 @@
       );
     };
 
-    // --- 公告手風琴組件 (深淺交錯排列) ---
+    // --- 公告手風琴組件 (表格清單形式) ---
     const AnnouncementAccordion = ({ announcement, index }) => {
       const [isOpen, setIsOpen] = useState(false);
 
@@ -446,51 +447,50 @@
         });
       };
 
-      // 判斷背景顏色 (深淺相間)
-      const bgColor = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
+      // 轉換日期格式 (例如 2026/05/20 -> 2026-05-20)
+      const formattedDate = announcement.date.replace(/\//g, '-');
 
       return (
-        <div className={`border-b border-gray-200 dark:border-gray-700 transition-colors ${bgColor}`}>
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="w-full px-4 md:px-6 py-5 flex items-start md:items-center justify-between hover:bg-slate-100/50 dark:hover:bg-gray-800 transition-colors focus:outline-none group"
+            className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors focus:outline-none group gap-2 md:gap-0 ${isOpen ? 'bg-blue-50/50 dark:bg-gray-800/80' : 'bg-white dark:bg-gray-900 hover:bg-slate-50 dark:hover:bg-gray-800/50'}`}
           >
-            <div className="flex flex-col text-left w-full pr-4 gap-2">
-              <div className="flex items-start md:items-center w-full">
-                <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 whitespace-nowrap shrink-0 w-28 md:w-32 pt-[3px] md:pt-0">
-                  <Calendar size={14} className="shrink-0" />
-                  {announcement.date}
-                </span>
-                <h3 className={`text-lg font-bold transition-colors break-words flex-1 ${isOpen ? 'text-[#003B71] dark:text-blue-400' : 'text-gray-800 dark:text-gray-200 group-hover:text-[#003B71] dark:group-hover:text-blue-400'}`}>
-                   {announcement.eventDate && <span className="mr-2 text-[#003B71] dark:text-blue-400">{announcement.eventDate}</span>}
-                   {announcement.title}
-                </h3>
-              </div>
-              <div className="flex items-center gap-2 flex-wrap pl-0 md:pl-32">
-                {announcement.departments.map((dept, idx) => (
-                  <span key={idx} className="text-xs font-medium text-[#003B71] dark:text-blue-300 bg-blue-100/50 dark:bg-blue-900/40 px-2 py-0.5 rounded border border-blue-100 dark:border-blue-800 uppercase tracking-wide whitespace-nowrap">
-                    {dept}
-                  </span>
-                ))}
-              </div>
+            {/* 日期區塊 */}
+            <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
+               <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>
+               {formattedDate}
             </div>
             
-            {/* 右側：箭頭 */}
-            <div className={`text-gray-400 dark:text-gray-500 transition-transform duration-300 flex-shrink-0 mt-2 md:mt-0 ${isOpen ? 'rotate-180 text-[#003B71] dark:text-blue-400' : 'rotate-0 group-hover:text-[#003B71] dark:group-hover:text-blue-400'}`}>
-               <ChevronDown size={20} />
+            {/* 標題區塊 */}
+            <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4 flex flex-wrap items-center gap-y-1">
+               <span className="group-hover:underline leading-snug break-all">{announcement.title}</span>
+               {attachments.length > 0 && <Paperclip size={14} className="inline ml-2 text-gray-400" />}
+            </div>
+            
+            {/* 發佈單位區塊 */}
+            <div className="w-full md:w-28 text-sm text-gray-600 dark:text-gray-400 md:text-center shrink-0 flex items-center justify-between md:justify-center">
+               <div className="flex items-center md:block">
+                 <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">單位</span>
+                 {announcement.departments[0]}
+               </div>
+               <div className={`md:hidden text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+                 <ChevronDown size={18} />
+               </div>
             </div>
           </button>
           
+          {/* 展開的內容區塊 */}
           <div 
             className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
           >
             <div className="overflow-hidden">
-              <div className="px-4 md:px-6 pt-2 pb-6">
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base ml-1 md:ml-32 whitespace-pre-wrap">
+              <div className="px-4 py-6 bg-slate-50/50 dark:bg-gray-800/40 border-t border-gray-100 dark:border-gray-800">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base ml-1 md:ml-[136px] whitespace-pre-wrap max-w-3xl">
                   {formatContent(announcement.content)}
                 </div>
                 {attachments.length > 0 && (
-                  <div className="mt-4 ml-1 md:ml-32 flex flex-wrap gap-3">
+                  <div className="mt-4 ml-1 md:ml-[136px] flex flex-wrap gap-3">
                     {attachments.map((file, idx) => (
                       <a 
                         key={idx}
@@ -507,6 +507,119 @@
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
+    const AnnouncementsSection = () => {
+      const [selectedYears, setSelectedYears] = useState([]);
+      const [selectedDepts, setSelectedDepts] = useState([]);
+
+      // 提取並過濾出不重複的年份，並加上排序 (新到舊)
+      const years = Array.from(new Set(announcementsData.map(a => a.date.split('/')[0]))).sort((a, b) => b.localeCompare(a));
+      
+      // 預設固定的股別順序
+      const depts = ['會長股', '公關股', '活動股', '總務股', '體育股', '美宣股', '器攝股', '學術股', '選委會', '轉知'];
+
+      const handleYearChange = (year) => {
+        setSelectedYears(prev => 
+          prev.includes(year) ? prev.filter(y => y !== year) : [...prev, year]
+        );
+      };
+
+      const handleDeptChange = (dept) => {
+        setSelectedDepts(prev => 
+          prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]
+        );
+      };
+
+      // 依據條件篩選公告
+      const filteredData = announcementsData.filter(a => {
+        const year = a.date.split('/')[0];
+        const matchYear = selectedYears.length === 0 || selectedYears.includes(year);
+        const matchDept = selectedDepts.length === 0 || a.departments.some(d => selectedDepts.includes(d));
+        return matchYear && matchDept;
+      });
+
+      return (
+        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-12 fade-in-up">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">公告</h2>
+            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Announcements</p>
+          </div>
+
+          {/* 篩選器 UI */}
+          <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mb-8 flex flex-col gap-6 transition-colors">
+            <div className="flex items-center gap-2 mb-1 border-b border-gray-200 dark:border-gray-600 pb-2">
+              <Filter size={18} className="text-gray-500 dark:text-gray-400" />
+              <h4 className="text-sm font-bold text-gray-700 dark:text-gray-200 tracking-wide">篩選條件</h4>
+              <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">(未勾選時顯示全部)</span>
+            </div>
+            
+            {/* 年份勾選區 */}
+            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
+              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">年份</span>
+              <div className="flex flex-wrap gap-4">
+                {years.map(year => (
+                  <label key={year} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
+                    <input 
+                      type="checkbox" 
+                      value={year}
+                      checked={selectedYears.includes(year)}
+                      onChange={() => handleYearChange(year)}
+                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
+                    />
+                    {year}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* 股別勾選區 */}
+            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
+              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">股別</span>
+              <div className="flex flex-wrap gap-4">
+                {depts.map(dept => (
+                  <label key={dept} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
+                    <input 
+                      type="checkbox" 
+                      value={dept}
+                      checked={selectedDepts.includes(dept)}
+                      onChange={() => handleDeptChange(dept)}
+                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
+                    />
+                    {dept}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* 表格標題列 (僅在電腦版顯示) */}
+          <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
+            <div className="w-32 text-center shrink-0">日期</div>
+            <div className="flex-1 text-center">標題</div>
+            <div className="w-28 text-center shrink-0">發佈單位</div>
+          </div>
+
+          {/* 公告列表區 */}
+          <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
+            {filteredData.length > 0 ? (
+              filteredData.map((announcement, index) => (
+                <AnnouncementAccordion 
+                  key={announcement.id} 
+                  announcement={announcement} 
+                  index={index} 
+                />
+              ))
+            ) : (
+              <div className="text-center py-16 text-gray-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center transition-colors">
+                <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
+                <p className="text-sm">請嘗試調整您的篩選條件。</p>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -678,7 +791,7 @@
           {/* 輪播圖組件 */}
           <HeroCarousel onNavigate={onNavigate} />
 
-          <div className="max-w-4xl mx-auto px-6 space-y-20 pb-12">
+          <div className="max-w-5xl mx-auto px-4 md:px-6 space-y-20 pb-12">
             {/* 最新公告區塊 */}
             <section className="pt-4 -mt-10 relative z-20">
                <div className="mb-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-3">
@@ -695,7 +808,15 @@
                   </button>
                 )}
               </div>
-              <div className="border-t border-gray-200 dark:border-gray-700">
+              
+              {/* 表格標題列 (僅在電腦版顯示) */}
+              <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
+                <div className="w-32 text-center shrink-0">日期</div>
+                <div className="flex-1 text-center">標題</div>
+                <div className="w-28 text-center shrink-0">發佈單位</div>
+              </div>
+              
+              <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
                 {recentAnnouncements.map((announcement, index) => (
                   <AnnouncementAccordion 
                     key={announcement.id} 
@@ -705,111 +826,6 @@
                 ))}
               </div>
             </section>
-          </div>
-        </div>
-      );
-    };
-
-    // --- 1.5 所有公告分頁區塊 (含篩選功能) ---
-    const AnnouncementsSection = () => {
-      const [selectedYears, setSelectedYears] = useState([]);
-      const [selectedDepts, setSelectedDepts] = useState([]);
-
-      // 提取並過濾出不重複的年份與股別，並加上排序 (新到舊)
-      const years = Array.from(new Set(announcementsData.map(a => a.date.split('/')[0]))).sort((a, b) => b.localeCompare(a));
-      
-      // 預設固定的股別順序
-      const depts = ['會長股', '公關股', '活動股', '總務股', '體育股', '美宣股', '器攝股', '學術股', '選委會', '轉知'];
-
-      const handleYearChange = (year) => {
-        setSelectedYears(prev => 
-          prev.includes(year) ? prev.filter(y => y !== year) : [...prev, year]
-        );
-      };
-
-      const handleDeptChange = (dept) => {
-        setSelectedDepts(prev => 
-          prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]
-        );
-      };
-
-      // 依據條件篩選公告
-      const filteredData = announcementsData.filter(a => {
-        const year = a.date.split('/')[0];
-        const matchYear = selectedYears.length === 0 || selectedYears.includes(year);
-        const matchDept = selectedDepts.length === 0 || a.departments.some(d => selectedDepts.includes(d));
-        return matchYear && matchDept;
-      });
-
-      return (
-        <div className="max-w-4xl mx-auto px-6 pt-12 fade-in-up">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">公告</h2>
-            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Announcements</p>
-          </div>
-
-          {/* 篩選器 UI */}
-          <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mb-8 flex flex-col gap-6 transition-colors">
-            <div className="flex items-center gap-2 mb-1 border-b border-gray-200 dark:border-gray-600 pb-2">
-              <Filter size={18} className="text-gray-500 dark:text-gray-400" />
-              <h4 className="text-sm font-bold text-gray-700 dark:text-gray-200 tracking-wide">篩選條件</h4>
-              <span className="text-xs text-gray-400 dark:text-gray-500 ml-2">(未勾選時顯示全部)</span>
-            </div>
-            
-            {/* 年份勾選區 */}
-            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
-              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">年份</span>
-              <div className="flex flex-wrap gap-4">
-                {years.map(year => (
-                  <label key={year} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
-                    <input 
-                      type="checkbox" 
-                      value={year}
-                      checked={selectedYears.includes(year)}
-                      onChange={() => handleYearChange(year)}
-                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
-                    />
-                    {year}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* 股別勾選區 */}
-            <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
-              <span className="text-sm font-bold text-[#003B71] dark:text-blue-400 w-12 shrink-0 pt-0.5">股別</span>
-              <div className="flex flex-wrap gap-4">
-                {depts.map(dept => (
-                  <label key={dept} className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 transition-colors">
-                    <input 
-                      type="checkbox" 
-                      value={dept}
-                      checked={selectedDepts.includes(dept)}
-                      onChange={() => handleDeptChange(dept)}
-                      className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-[#003B71] dark:text-blue-500 focus:ring-[#003B71] dark:focus:ring-blue-500 cursor-pointer"
-                    />
-                    {dept}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-200 dark:border-gray-700">
-            {filteredData.length > 0 ? (
-              filteredData.map((announcement, index) => (
-                <AnnouncementAccordion 
-                  key={announcement.id} 
-                  announcement={announcement} 
-                  index={index} 
-                />
-              ))
-            ) : (
-              <div className="text-center py-16 text-gray-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center transition-colors">
-                <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
-                <p className="text-sm">請嘗試調整您的篩選條件。</p>
-              </div>
-            )}
           </div>
         </div>
       );
