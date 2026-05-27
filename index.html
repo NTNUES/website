@@ -208,25 +208,28 @@
       return (
         <div className="border-b border-gray-200 dark:border-gray-700">
           <button onClick={handleToggle} className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors focus:outline-none group gap-2 md:gap-0 ${isOpen ? 'bg-blue-50/50 dark:bg-gray-800/80' : 'bg-white dark:bg-gray-900 hover:bg-slate-50 dark:hover:bg-gray-800/50'}`}>
-            <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
+            <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0 flex items-center md:justify-center">
               <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>
               {formattedDate}
             </div>
-            <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+            <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold md:px-2 flex flex-wrap items-center gap-x-1.5 gap-y-1">
               <span className="group-hover:underline leading-snug break-words">{announcement.title}</span>
               {attachments.length > 0 && <Paperclip size={13} className="text-gray-400 shrink-0" />}
-              {count !== null && count > 0 && (
-                <span className="inline-flex items-center gap-0.5 text-[11px] font-normal text-gray-400 dark:text-gray-500 shrink-0">
-                  <Eye size={11} />{count}
-                </span>
-              )}
             </div>
-            <div className="w-full md:w-28 text-sm text-gray-600 dark:text-gray-400 md:text-center shrink-0 flex items-center justify-between md:justify-center mt-1 md:mt-0">
+            <div className="w-full md:w-28 text-sm text-gray-600 dark:text-gray-400 shrink-0 flex items-center md:justify-center mt-1 md:mt-0">
               <div className="flex items-center md:block">
                 <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">單位</span>
                 {announcement.departments[0]}
               </div>
-              <div className={`md:hidden text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}><ChevronDown size={18} /></div>
+            </div>
+            <div className="w-full md:w-16 text-sm text-gray-500 dark:text-gray-400 shrink-0 flex items-center justify-between md:justify-center mt-1 md:mt-0">
+               <div className="flex items-center gap-1.5 md:block">
+                 <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">瀏覽</span>
+                 <span className="inline-flex items-center justify-center font-mono">
+                   {count !== null ? count : '-'}
+                 </span>
+               </div>
+               <div className={`md:hidden text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}><ChevronDown size={18} /></div>
             </div>
           </button>
           <div className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
@@ -284,8 +287,9 @@
           </div>
           <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
             <div className="w-32 text-center shrink-0">日期</div>
-            <div className="flex-1 pl-2">標題</div>
+            <div className="flex-1 md:px-2 text-left">標題</div>
             <div className="w-28 text-center shrink-0">發佈單位</div>
+            <div className="w-16 text-center shrink-0">瀏覽</div>
           </div>
           <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
             {filteredData.length > 0 ? filteredData.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />) : (
@@ -377,8 +381,9 @@
               </div>
               <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
                 <div className="w-32 text-center shrink-0">日期</div>
-                <div className="flex-1 pl-2">標題</div>
+                <div className="flex-1 md:px-2 text-left">標題</div>
                 <div className="w-28 text-center shrink-0">發佈單位</div>
+                <div className="w-16 text-center shrink-0">瀏覽</div>
               </div>
               <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
                 {recentAnnouncements.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />)}
@@ -543,7 +548,7 @@
           </div>
           <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
             <div className="w-32 text-center shrink-0">更新日期</div>
-            <div className="flex-1 text-center">文件名稱</div>
+            <div className="flex-1 md:px-2 text-left">文件名稱</div>
             <div className="w-24 text-center shrink-0">文件格式</div>
             <div className="w-28 text-center shrink-0">檔案下載</div>
           </div>
@@ -554,17 +559,17 @@
               const rowBg = index % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-slate-50 dark:bg-gray-800/50';
               return (
                 <a key={doc.id} href={doc.link} target="_blank" rel="noreferrer" className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors group gap-2 md:gap-0 border-b border-gray-200 dark:border-gray-700 hover:bg-blue-50/50 dark:hover:bg-gray-800/80 ${rowBg}`}>
-                  <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
+                  <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 shrink-0 flex items-center md:justify-center">
                     <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>{formattedDate}
                   </div>
-                  <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4"><span className="group-hover:underline leading-snug break-all">{doc.title}</span></div>
-                  <div className="w-full md:w-24 text-sm md:text-center shrink-0 flex items-center mt-1 md:mt-0">
+                  <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold md:px-2"><span className="group-hover:underline leading-snug break-all">{doc.title}</span></div>
+                  <div className="w-full md:w-24 text-sm shrink-0 flex items-center md:justify-center mt-1 md:mt-0">
                     <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">格式</span>
                     <span className={`${tagBg} text-white text-[11px] px-2 py-0.5 rounded-sm tracking-wider`}>{doc.type}</span>
                   </div>
-                  <div className="w-full md:w-28 text-sm md:text-center shrink-0 flex items-center mt-1 md:mt-0">
+                  <div className="w-full md:w-28 text-sm shrink-0 flex items-center justify-between md:justify-center mt-1 md:mt-0">
                     <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">檔案</span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#003B71] dark:group-hover:text-blue-400 group-hover:border-[#003B71] dark:group-hover:border-blue-400 transition-colors shadow-sm ml-auto md:ml-0 md:mx-auto"><Download size={14} /> 點此下載</span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#003B71] dark:group-hover:text-blue-400 group-hover:border-[#003B71] dark:group-hover:border-blue-400 transition-colors shadow-sm ml-auto md:ml-0"><Download size={14} /> 點此下載</span>
                   </div>
                 </a>
               );
