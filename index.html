@@ -445,14 +445,13 @@
               {formattedDate}
             </div>
             
-            {/* 標題 + 點擊次數 */}
-            <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4 flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="group-hover:underline leading-snug break-all">{announcement.title}</span>
-              {attachments.length > 0 && <Paperclip size={14} className="inline text-gray-400 shrink-0" />}
-              {/* 👁 點擊次數 badge */}
-              {count !== null && (
-                <span className="inline-flex items-center gap-1 text-xs font-normal text-gray-400 dark:text-gray-500 ml-1 shrink-0">
-                  <Eye size={12} />
+            {/* 標題 + 附件圖示 + 點擊次數（inline） */}
+            <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+              <span className="group-hover:underline leading-snug break-words">{announcement.title}</span>
+              {attachments.length > 0 && <Paperclip size={13} className="text-gray-400 shrink-0" />}
+              {count !== null && count > 0 && (
+                <span className="inline-flex items-center gap-0.5 text-[11px] font-normal text-gray-400 dark:text-gray-500 shrink-0">
+                  <Eye size={11} />
                   {count}
                 </span>
               )}
@@ -550,7 +549,7 @@
           
           <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
             <div className="w-32 text-center shrink-0">日期</div>
-            <div className="flex-1 text-center">標題</div>
+            <div className="flex-1 pl-2">標題</div>
             <div className="w-28 text-center shrink-0">發佈單位</div>
           </div>
 
@@ -700,7 +699,7 @@
               </div>
               <div className="hidden md:flex border-b-2 border-blue-800 dark:border-blue-500 bg-white dark:bg-gray-900 text-[#003B71] dark:text-blue-400 font-bold text-sm py-2 px-4">
                 <div className="w-32 text-center shrink-0">日期</div>
-                <div className="flex-1 text-center">標題</div>
+                <div className="flex-1 pl-2">標題</div>
                 <div className="w-28 text-center shrink-0">發佈單位</div>
               </div>
               <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
