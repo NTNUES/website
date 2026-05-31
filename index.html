@@ -437,6 +437,7 @@
       const [allViews, setAllViews] = useState({});
       const [visitData, setVisitData] = useState({});
       const [activeChartTab, setActiveChartTab] = useState('week');
+      const [viewSortDesc, setViewSortDesc] = useState(true);
 
       useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
 
@@ -591,12 +592,27 @@
                     <th className="px-6 py-3 font-bold w-8">#</th>
                     <th className="px-6 py-3 font-bold">標題</th>
                     <th className="px-6 py-3 font-bold whitespace-nowrap">發布日期</th>
-                    <th className="px-6 py-3 font-bold text-right">瀏覽</th>
+                    <th className="px-6 py-3 text-right">
+                      <button
+                        onClick={() => setViewSortDesc(p => !p)}
+                        className="inline-flex items-center gap-1 font-bold text-[#003B71] dark:text-blue-400 hover:opacity-70 transition-opacity"
+                        title={viewSortDesc ? '目前：由高到低，點擊切換' : '目前：由低到高，點擊切換'}
+                      >
+                        瀏覽
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          {viewSortDesc
+                            ? <path d="m6 9 6 6 6-6"/>
+                            : <path d="m18 15-6-6-6 6"/>}
+                        </svg>
+                      </button>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   {[...announcementsData]
-                    .sort((a, b) => (allViews[b.id] || 0) - (allViews[a.id] || 0))
+                    .sort((a, b) => viewSortDesc
+                      ? (allViews[b.id] || 0) - (allViews[a.id] || 0)
+                      : (allViews[a.id] || 0) - (allViews[b.id] || 0))
                     .map((a, i) => (
                     <tr key={a.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-colors">
                       <td className="px-6 py-3 text-gray-300 dark:text-gray-600 font-mono text-xs">{i + 1}</td>
