@@ -197,7 +197,11 @@
       useEffect(() => {
         const sessionKey = 'viewed_site_overall';
         if (!sessionStorage.getItem(sessionKey)) {
+          // 總計
           db.ref('views/overall_site_views').transaction((c) => (c || 0) + 1);
+          // 每日計數 (格式: visits/YYYY-MM-DD)
+          const today = new Date().toISOString().slice(0, 10);
+          db.ref(`visits/${today}`).transaction((c) => (c || 0) + 1);
           sessionStorage.setItem(sessionKey, 'true');
         }
         const ref = db.ref('views/overall_site_views');
@@ -431,51 +435,174 @@
     const AdminSection = ({ announcementsData = [] }) => {
       const [time, setTime] = useState(new Date());
       const [allViews, setAllViews] = useState({});
+      const [visitData, setVisitData] = useState({});
+      const [activeChartTab, setActiveChartTab] = useState('week');
+
       useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
+
       useEffect(() => {
         const ref = db.ref('views');
-        ref.on('value', (snapshot) => setAllViews(snapshot.val() || {}));
+        ref.on('value', (snap) => setAllViews(snap.val() || {}));
         return () => ref.off();
       }, []);
+
+      useEffect(() => {
+        const ref = db.ref('visits');
+        ref.on('value', (snap) => setVisitData(snap.val() || {}));
+        return () => ref.off();
+      }, []);
+
       const overallCount = allViews['overall_site_views'] || 0;
+      const now = new Date();
+      const toDateStr = (d) => d.toISOString().slice(0, 10);
+
+      const getRange = (days) => {
+        const dates = [];
+        for (let i = days - 1; i >= 0; i--) {
+          const d = new Date(now);
+          d.setDate(d.getDate() - i);
+          dates.push(toDateStr(d));
+        }
+        return dates;
+      };
+
+      const sumRange = (dates) => dates.reduce((acc, d) => acc + (visitData[d] || 0), 0);
+
+      const todayStr = toDateStr(now);
+      const statToday = visitData[todayStr] || 0;
+      const statWeek  = sumRange(getRange(7));
+      const statMonth = sumRange(getRange(30));
+      const statYear  = sumRange(getRange(365));
+
+      const getMonthDates = () => {
+        const months = [];
+        for (let i = 11; i >= 0; i--) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          months.push(d.toISOString().slice(0, 7));
+        }
+        return months;
+      };
+
+      const chartConfigs = {
+        week:  { label: '近 7 天',   dates: getRange(7),       fmt: (d) => d.slice(5), isMonthly: false },
+        month: { label: '近 30 天',  dates: getRange(30),      fmt: (d) => d.slice(5), isMonthly: false },
+        year:  { label: '近 12 個月', dates: getMonthDates(),  fmt: (d) => d.slice(0, 7), isMonthly: true },
+      };
+
+      const cfg = chartConfigs[activeChartTab];
+      const chartData = cfg.dates.map(d => ({
+        label: cfg.fmt(d),
+        value: cfg.isMonthly
+          ? Object.entries(visitData).filter(([k]) => k.startsWith(d)).reduce((s, [, v]) => s + v, 0)
+          : (visitData[d] || 0),
+      }));
+      const maxVal = Math.max(...chartData.map(d => d.value), 1);
+
+      const statCards = [
+        { label: '今日', value: statToday, color: 'text-blue-600 dark:text-blue-400' },
+        { label: '本週', value: statWeek,  color: 'text-green-600 dark:text-green-400' },
+        { label: '本月', value: statMonth, color: 'text-orange-600 dark:text-orange-400' },
+        { label: '今年', value: statYear,  color: 'text-purple-600 dark:text-purple-400' },
+      ];
+
+      const barWidth = activeChartTab === 'year' ? '56px' : activeChartTab === 'month' ? '18px' : '32px';
+
       return (
-        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-12 fade-in-up">
-          <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold text-[#003B71] dark:text-blue-400 mb-3">管理後台</h2>
-            <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Admin Dashboard</p>
+        <div className="max-w-5xl mx-auto px-4 md:px-6 pt-12 pb-12 fade-in-up">
+          <div className="mb-10">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-gray-400 dark:text-gray-500 mb-2">Admin Dashboard</p>
+            <h2 className="font-display text-4xl md:text-5xl text-[#003B71] dark:text-white">管理後台</h2>
+            <div className="mt-3 w-12 h-0.5 bg-[#003B71] dark:bg-blue-400"></div>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
-              <ClockIcon size={40} className="text-blue-500 mb-4 opacity-80" />
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-bold mb-1">系統當前時間</p>
-              <h3 className="text-2xl font-mono font-bold text-gray-800 dark:text-gray-100">{time.toLocaleString('zh-TW', { hour12: false })}</h3>
+
+          {/* 總覽卡片 */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 p-5 border border-gray-100 dark:border-gray-700 shadow-sm rounded flex flex-col items-center justify-center col-span-2 md:col-span-1">
+              <ClockIcon size={24} className="text-gray-400 mb-2" />
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">系統時間</p>
+              <p className="font-mono text-sm font-bold text-gray-700 dark:text-gray-200">{time.toLocaleString('zh-TW', { hour12: false })}</p>
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
-              <ActivityIcon size={40} className="text-green-500 mb-4 opacity-80" />
-              <p className="text-sm text-gray-500 dark:text-gray-400 font-bold mb-1">網站總瀏覽人次</p>
-              <h3 className="text-4xl font-mono font-bold text-gray-800 dark:text-gray-100">{overallCount.toLocaleString()}</h3>
+            <div className="bg-white dark:bg-gray-800 p-5 border border-gray-100 dark:border-gray-700 shadow-sm rounded flex flex-col items-center justify-center">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">網站總瀏覽</p>
+              <p className="font-mono text-3xl font-bold text-[#003B71] dark:text-blue-400">{overallCount.toLocaleString()}</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 p-5 border border-gray-100 dark:border-gray-700 shadow-sm rounded flex flex-col items-center justify-center">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">公告總則數</p>
+              <p className="font-mono text-3xl font-bold text-[#003B71] dark:text-blue-400">{announcementsData.length}</p>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-slate-50 dark:bg-gray-800 flex items-center gap-2">
-              <DashboardIcon size={20} className="text-gray-500" />
-              <h4 className="font-bold text-gray-800 dark:text-gray-200">各項公告瀏覽數據總覽</h4>
+
+          {/* 時段統計 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            {statCards.map(({ label, value, color }) => (
+              <div key={label} className="bg-white dark:bg-gray-800 p-5 border border-gray-100 dark:border-gray-700 shadow-sm rounded text-center">
+                <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 tracking-wide">{label}瀏覽</p>
+                <p className={`font-mono text-3xl font-bold ${color}`}>{value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* 長條圖 */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded overflow-hidden mb-6">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ActivityIcon size={16} className="text-gray-400" />
+                <h4 className="font-bold text-gray-700 dark:text-gray-200 text-sm">瀏覽趨勢</h4>
+              </div>
+              <div className="flex gap-1 bg-slate-100 dark:bg-gray-900 p-1 rounded">
+                {Object.entries(chartConfigs).map(([key, val]) => (
+                  <button key={key} onClick={() => setActiveChartTab(key)}
+                    className={`px-3 py-1 text-xs font-bold rounded transition-colors
+                      ${activeChartTab === key
+                        ? 'bg-white dark:bg-gray-700 text-[#003B71] dark:text-blue-400 shadow-sm'
+                        : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}>
+                    {val.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="px-6 pt-4 pb-2">
+              <div className="flex items-end gap-px overflow-x-auto pb-4" style={{ minHeight: '160px' }}>
+                {chartData.map((d, i) => (
+                  <div key={i} className="flex flex-col items-center gap-1 shrink-0" style={{ width: barWidth }}>
+                    {d.value > 0 && <span className="text-[9px] text-gray-400 font-mono">{d.value}</span>}
+                    <div className="w-full rounded-sm bg-[#003B71] dark:bg-blue-500 transition-all duration-500 hover:bg-[#002a52] dark:hover:bg-blue-400"
+                      style={{ height: `${Math.max((d.value / maxVal) * 100, d.value > 0 ? 3 : 0)}px`, opacity: d.value > 0 ? 1 : 0.15 }} />
+                    <span className={`text-gray-400 font-mono whitespace-nowrap ${activeChartTab === 'month' ? 'text-[8px]' : 'text-[9px]'}`}
+                      style={activeChartTab === 'month' ? { writingMode: 'vertical-rl', transform: 'rotate(180deg)' } : {}}>
+                      {d.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 公告瀏覽排行 */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+              <DashboardIcon size={16} className="text-gray-400" />
+              <h4 className="font-bold text-gray-700 dark:text-gray-200 text-sm">公告瀏覽排行</h4>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400">
-                    <th className="px-6 py-3 font-bold">發布日期</th>
+                  <tr className="bg-slate-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-xs text-gray-400 dark:text-gray-500">
+                    <th className="px-6 py-3 font-bold w-8">#</th>
                     <th className="px-6 py-3 font-bold">標題</th>
-                    <th className="px-6 py-3 font-bold text-right">瀏覽次數</th>
+                    <th className="px-6 py-3 font-bold whitespace-nowrap">發布日期</th>
+                    <th className="px-6 py-3 font-bold text-right">瀏覽</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
-                  {announcementsData.map((a) => (
-                    <tr key={a.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-slate-50/50 dark:hover:bg-gray-800/50 transition-colors">
-                      <td className="px-6 py-4 text-gray-600 dark:text-gray-400 shrink-0">{a.date}</td>
-                      <td className="px-6 py-4 font-medium text-gray-800 dark:text-gray-200 max-w-[300px] truncate" title={a.title}>{a.title}</td>
-                      <td className="px-6 py-4 text-right font-mono font-bold text-[#003B71] dark:text-blue-400">{allViews[a.id] || 0}</td>
+                  {[...announcementsData]
+                    .sort((a, b) => (allViews[b.id] || 0) - (allViews[a.id] || 0))
+                    .map((a, i) => (
+                    <tr key={a.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-colors">
+                      <td className="px-6 py-3 text-gray-300 dark:text-gray-600 font-mono text-xs">{i + 1}</td>
+                      <td className="px-6 py-3 font-medium text-gray-800 dark:text-gray-200 max-w-xs truncate" title={a.title}>{a.title}</td>
+                      <td className="px-6 py-3 text-gray-400 dark:text-gray-500 font-mono text-xs whitespace-nowrap">{a.date}</td>
+                      <td className="px-6 py-3 text-right font-mono font-bold text-[#003B71] dark:text-blue-400">{allViews[a.id] || 0}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -485,7 +612,6 @@
         </div>
       );
     };
-
     // IntroSection
     const IntroSection = ({ onNavigate, announcementsData, loading }) => {
       const recentAnnouncements = announcementsData.slice(0, 5);
