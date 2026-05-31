@@ -14,6 +14,7 @@
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -99,29 +100,79 @@
       { id: 4, title: "伯樂大學堂 學系之夜", date: "2025/08/27", image: "https://drive.google.com/thumbnail?id=1FB2JCcReTGmoINqnqeIl9MpbCVuhWeXj&sz=w3840", desc: "新生參與的第一個活動，透過系上老師對系上的介紹、行星分家與抽直屬活動，讓新生更快適應並與大學生活接軌。" }
     ];
 
-    const announcementsData = [
-      { id: "2026-01-05", title: "2026地科展《脈動|Signal》回顧片已上線", date: "2026/05/20", departments: ["活動股"], content: `https://youtu.be/0Z9C0QIeUiM`, file: null },
-      { id: "2026-01-04", title: "2026/05/29 地科系學會期末會員大會", date: "2026/05/20", departments: ["會長股"], content: `各位會員好\n\n本會將於2026年05月29日（星期五） 12:30 舉行本學期期末會員大會，地點為公館校區理學院E301教室。\n\n本次會議將進行本會114學年活動回顧及財務報告，另有發放歐趴糖，歡迎會員踴躍參與。若需訂購午餐請填寫以下表單：https://forms.gle/Ay443kigDh1BxCDF8\n\n祝 期末順利\n\n會長 簡志諭`, file: { name: "期末會員大會會議通知.pdf", link: "https://drive.google.com/file/d/12xcsFZq6CP-IWZ275JubaLatgRca2rty/view?usp=sharing" } },
-      { id: "2026-99-02", title: "2026/06/12 地科大大家聚", date: "2026/05/16", departments: ["轉知"], content: `【大家聚｜前導篇】\n\n-\n\n🦸🏻‍♂️：誒誒誒！你有聽說嗎？今年那個傳說中的活動要復活了！\n\n🧑🏻‍🌾：蛤？什麼東西復活？恐龍喔？\n\n🦸🏻‍♂️：比恐龍還稀有——可以免費吃好料的活動！\n\n🧑🏻‍🌾：等等，你是說那個一年一度、大家會聚在一起的活動嗎？\n\n🦸🏻‍♂️：對！就是它！睽違已久，強勢回歸！\n\n🧑🏻‍🌾：可是……要社交欸，我光想到就開始耗電。\n\n🦸🏻‍♂️：別怕！這不是普通社交，這是「邊吃邊社交」，難度直接下降 80%。\n\n🧑🏻‍🌾：聽起來好像有點可以……\n\n🦸🏻‍♂️：而且免費吃、免費玩、免費認識大家，這不是活動，這是福報。\n\n🧑🏻‍🌾：你這樣講我突然覺得不去好像會虧。\n\n🦸🏻‍♂️：沒錯！人生可以錯過復興幹線，但不能錯過免費好料。\n\n🧑🏻‍🌾：好啦好啦，那我要去哪裡報名？\n\n🦸🏻‍♂️：連結就在下面啊！快去報名吧！\n\n-\n\n誒嘿沒錯，就是免費吃好料的時間啦！\n\n不快點手刀報名～\n\n-\n\n⏰ 時間：2026/06/12（五）17:30 ~ 21:30\n\n📍 地點：饗食天堂 信義店\n\n💰 費用：大一至大三免費參加！\n\n-\n\n報名連結：\n\nhttps://forms.gle/qsp8X9QERL6aDAmS7\n\n-\n\n注意事項：\n\n大家請注意報名時間，只到2026/05/22 23:59\n\n因為名額有限，請大家儘早報名，如有異動會提前通知～\n\n當天下午如果有課或考試的話，請寫完再過來用餐，請為自己負責！`, file: null },
-      { id: "2026-99-01", title: "葉庭光老師基隆嶼夜釣體驗與魚類生態調查探究活動", date: "2026/05/13", departments: ["轉知"], content: `基隆嶼 夜釣體驗 與魚類生態調查探究活動\n\n活動時間 預計於6月13日或6月14日 傍晚17:00~21:00，包船\n自行前往基隆八斗子漁港集合與解散\n若有困難，可協助叫車或安排搭便車(4人共乘單程約200~250/人)\n預計 出海 費用約1200元，多退，少不須補\n務必攜帶身分證件\n\n聯絡人：葉庭光 0955698738\nhttps://forms.gle/xyUrgfkF3de3x66r6`, file: null },
-      { id: "2026-03-03", title: "2026/5/15 地科系系躲貓貓", date: "2026/05/08", departments: ["活動股"], content: `大家午安\n我是系躲貓貓總籌 地科117張鈞幃\n\n我們預計在5/15（五）晚上在公館校區舉辦系躲貓貓（真的躲貓貓）\n會有躲貓貓以及宵夜🍽️補充體力\n\n大家樓頂揪樓下、厝邊揪隔壁一起來玩😍😍\n\n報名連結：https://forms.gle/tqnUvqnJwNFgg4pa6`, file: null },
-      { id: "2026-03-02", title: "2026/5/15 系躲報名開始", date: "2026/05/04", departments: ["活動股"], content: `想在忙碌課業中放鬆一下嗎？\n一起來躲貓貓吧！\n不只可以紓壓放鬆\n還能找到素未蒙面的同學✨\n在遊戲中認識彼此\n而且還有美味宵夜😋\n邊玩邊吃，快樂直接加倍！\n\n日期: 2026/05/15 星期五\n時間: 18:30-21:30\n地點: E101\n費用:非會員90元/人 會員65元/人\n\n報名表單：\nhttps://forms.gle/tqnUvqnJwNFgg4pa6`, file: null },
-      { id: "2026-09-04", title: "第四十三屆正副會長改選結果", date: "2026/04/17", departments: ["選委會"], content: `本次正副會長改選投票率29.5%，投票結果如下：\n同意票：45票\n不同意票：2票\n廢票：2票\n\n根據本會選罷法，同意票大於不同意票且投票率達五分之一\n恭喜當選🎉期待未來的系學會持續發光發熱，一起創造更多精彩回憶！`, file: null },
-      { id: "2026-01-03", title: "119級伯樂大學堂輔導員甄選", date: "2026/04/16", departments: ["會長股"], content: `大家早安\n119級伯樂大學堂要來囉～\n想認識更多人、挑戰自己、創造屬於大學的難忘回憶嗎？\n有興趣擔任輔導員趕快來填表單報名吧！\n\n📅報名截止：4/27（一）19：00 逾時不候 \n📬錄取通知：4/30（四）前以Email發送通知，未錄取不另行通知\n\n🔗連結傳送門👉\nhttps://forms.gle/yhD7AhJrZZ3QjM1T7`, file: null },
-      { id: "2026-09-02", title: "【更新】地球科學系學會第四十三屆正副會長改選選舉公報公布", date: "2026/04/14", departments: ["選委會"], content: `更新選舉公報\n選舉人數改為共166人\n\n[FILE:新版選舉公報.pdf|https://drive.google.com/file/d/1QgXGz7urypyqtGAr__agFihvY2-lmcjt/view?usp=share_link]\n\n──────────────────────────────\n\n<gray>2026/04/09</gray>\n地球科學系學會第四十三屆正副會長改選選舉公報已經公布，請點擊下方附檔查閱。\n\n[FILE:原版選舉公報.pdf|https://drive.google.com/file/d/1k-FlbJmRYDXBmpMEhBkYEv_WPPqbzRyM/view?usp=share_link]` },
-      { id: "2026-09-03", title: "地球科學系學會第43屆會長改選政見發表", date: "2026/04/10", departments: ["選委會"], content: `紀錄影片：https://www.youtube.com/watch?v=IzzQ4TEZvuM`, file: null },
-      { id: "2026-09-01", title: "地球科學系學會第43屆正副會長改選時程", date: "2026/04/02", departments: ["選委會"], content: `本次選委會名單為：簡志諭（主席）、李冠廷、郭傲寒、張鈞幃、林佳泓\n開放候選人登記時間：4/2 00:00 至 4/8 20:17\n改選說明會（E101）：4/2 12:30-13:10 \n候選人與政見公布：4/9 至 4/16\n候選人政見發表會（E101）：4/10 12:30-13:10\n投票日（線上投票）：4/17 9:00-17:00`, file: null },
-      { id: "2026-05-01", title: "水上運動會報名", date: "2026/04/02", departments: ["體育股"], content: `大家好，這邊向大家宣布水上運動會今天開始報名了，報名時間為現在開始到4/23日，活動時間為5/22(五)為了方便報名流程，以下表單我會統計到4/20的23:59分。方便我處理後續流程。請有興趣的同學踴躍報名！\n\n水運會項目如下:\n個人單項\n水中摸象(撿象棋抽獎，當場報名)\n趣味競賽(水上拔河)\n智慧鐵人兩項(腳踏車跟游泳)\n\n本次水運會報名說明簡報與報名表單:\nhttps://docs.google.com/forms/d/e/1FAIpQLSfDFU3x_QGMAbvbe3hqhRrd10q9OYQfgOGzS4U4sEGYsq5bAg/viewform?usp=publish-editor\n\n相關活動內容與詳細比賽方法及秩序冊在本次水運會報名說明會議簡報中，請有興趣的同學多加利用。\n簡報連結:\nhttps://www.canva.com/design/DAGkk8vS7sE/qaqlv0-FuzFXMcGD5QhRmQ/edit`, file: null },
-      { id: "2026-01-02", title: "會長改選說明會+歐趴糖", date: "2026/03/30", departments: ["會長股", "公關股"], content: `大家早安\n4/2(四) 12:30 E101舉行會長改選說明會+領歐趴糖\n歡迎對於擔任會長有興趣的人可以來聽\n預祝大家期中順利`, file: null },
-      { id: "2026-03-01", title: "2026地科展", date: "2026/03/26", departments: ["活動股"], content: `2026地科展將於2026年4月25日舉行\n📅 2026 年 4 月 25 日（六）09:30–16:30\n📍 師大公館校區\n👉 活動詳情請見：https://youb1707.wixsite.com/ntnues2026openhouse`, file: null },
-      { id: "2026-01-01", title: "2026/3/6 地科系學會期初會員大會", date: "2026/02/13", eventDate: "2026/03/06", departments: ["會長股"], content: `各位會員好\n\n本會將於2026年3月6日(星期五) 12:30 舉行第二學期期初會員大會，地點為理學院E301教室。\n\n本次會議將進行本學期活動預告，並針對「組織章程」及「選舉罷免辦法」進行修訂與投票，詳細內容請見附檔。由於涉及重要章程之變更，請具備投票權（繳交會費）的會員務必撥冗出席，以利會務推動。同時，也歡迎所有會員一同參與會議，針對章程或選罷法修訂內容提出指教與建議。\n\n另外附上便當訂購表單連結：https://forms.gle/bg5Cnbr54byRr47e6\n\n祝 新年快樂\n\n會長 簡志諭`, file: { name: "地科系學會114學年度第二學期期初會員大會會議通知0213.pdf", link: "https://drive.google.com/file/d/1JYig36P-qsEbUqmeqSKU4i5yZEXOYfBs/view?usp=share_link" } },
-      { id: "2025-01-01", title: "二〇二五臺師大四系聯合耶誕晚會space1225協辦系購票", date: "2025/10/01", departments: ["會長股"], content: `大家早安\n四系聯合耶誕晚會早鳥票開始購票了喔\n地科系會員價370/張\n非會員優惠價400/張\n不要猶豫了🫵 \n\nℹ️耶晚資訊\n臺師大四系聯合耶誕晚會SPACE❶㊁②㊄\n日期｜2025/12/20 （Sat.）\n時間｜17:00入場 ⁞ 18:00開始\n地點｜臺師大和平校區 綜合體育館四樓\n藝人｜請見 ＠ntnuspace1225\n表單連結｜https://forms.gle/webANJUzrkyBzpjA8\n地科系為協辦並協助宣傳｜有任何問題歡迎私訊地科系學會IG(@ntnu_es)`, file: null },
-      { id: "2025-03-02", title: "四系聯合迎新烤肉｜生科 × 地科 × 營養 × 化學", date: "2025/09/10", departments: ["活動股"], content: `🔥【四系聯合迎新烤肉｜生科 × 地科 × 營養 × 化學】🔥\n\n新的學期、新的開始，怎麼能少了最熱鬧的迎新活動？\n今年我們結合了 生科、地科、營養、化學 四大系，準備一場絕對不容錯過的—— 迎新烤肉派對！ 🥓🥬🥤\n\n在這裡，你可以：\n✨ 認識不同科系的新朋友，拓展人脈！\n✨ 在滿滿烤肉香中，享受美食與歡笑！\n\n📅活動時間｜10/2（四）18:30-21:30\n📍活動地點｜華中露營場\n💰費用｜正式會員350元；非會員400元\n報名資格｜四系在學學生，118級新生優先\n繳費時間與地點｜\n9/19 （五）  12:30-13:30 學二交誼廳\n9/22（一）  12:30-13:30 學二交誼廳\n\n帶著期待與好奇，來跟我們一起點燃這個夜晚吧！\n不管你是新生、舊生，都歡迎加入這場跨系盛會～但名額只有20人，要來要快！\n—————————————————————\n⚠️報名人數超出預期，會以有繳會費者優先錄取，再來才是以填表單順序來錄取\n👉 報名連結：https://forms.gle/8CUCkE44P3377iCc9`, file: null },
-      { id: "2025-05-01", title: "女排場地使用資訊", date: "2025/09/10", departments: ["體育股"], content: `本學期女排跟物理系女排一起使用場地，若有想加入的人可以找體育股獲得相關資訊`, file: null },
-      { id: "2025-03-01", title: "新生宿營", date: "2025/09/05", departments: ["活動股"], content: `轉達\n大家好我是宿營總籌林佳泓，踏入全新的大學生活，還在思考要參加什麼活動、或擔心無法跟同學變熟的朋友們別煩惱了🦊🐰🦊🐰🦊🐰屬於你們的第一個重要活動「新生宿營」要來啦！\n本次由「東亞× 地科× 台文」聯合舉辦「台扯啦!地東裡怎麼有隻穿警裝的兔子?!」新生宿營，各位將化身成動物方城市的探員👮🏻‍♂️👮🏻，和新朋友們共同破解任務，一起合作、奔跑、尖叫🗣️🗣️🗣️!！\n在大家彼此還不太熟悉之時，宿營就是認識同學的最佳機會，透過RPG闖關、水大地、烤肉晚會等豐富活動，加上共同住宿一晚的特別體驗，不僅能快速拉近彼此距離，還能交到不同科系的好友～說不定，還會能在宿營裡收穫愛情呢！😲😍🥰👥🫂\n\n宿營詳細資訊：\n📍地點：雷朗極限探索（249新北市八里區忠五街70號）\n📆時間：2025年9月20至21日（兩天一夜）\n💰費用：2400（有交會費的只要2300！）\n🔗連結：https://docs.google.com/forms/d/e/1FAIpQLSdDDtGD01LfycYZ8iYgwm5TRhD5dPJnjCJgFMgVopx_t6YD9Q/viewform?usp=header\n\n有任何問題都歡迎直接聯絡我～\n還在猶豫的朋友們心動不如馬上行動，千萬別錯過這個屬於大一的第一個精彩篇章，快來加入本次的聯合新生宿營吧，後續也會有更詳細的行前通知！`, file: null },
-      { id: "2025-04-01", title: "系學會費繳交通知", date: "2025/09/02", departments: ["總務股"], content: `大家早安\n我是第42屆地球科學系學會總務 張鈞幃\n\n恭喜大家展開新一學期的大學生活！\n我們會因應不同節日，籌辦許多娛樂或是體育類別的活動！為了讓大家有釋放壓力與表現活力的舞台，學會也極力支持各系隊的運作。系上刊物或是系服都代表著地科系，學會這邊也盡我們所能積極出品！每位地科系學生都是我們的基本會員，為了維護大家的權益、讓大家能夠體驗到更美好的活動，需要酌收系學會費，運用在不論是系學術，抑或是舉辦各個活動之中！\n\n詳細的收支會全部透明化，並在每學期末公開細項與結餘，鞏固大家的權益並且讓經費有安全的流向！\n\n當然，為了保障大家的選擇權，我們提供同學繳費年期的選擇。若先繳一年會費，金額為$700，連續繳兩年會費金額為$1400，如此類推，若想一次繳五年會費，金額為$3500。\n\n預祝大家能夠開開心心、度過新一學期的大學生活！\n\n以下為系學會專用之郵局帳戶資訊：\n郵局代號：700\n帳號：0001972 0090269\n\n匯款成功後請填寫回覆表單，之後也會開立收據\n\n回覆表單連結:https://forms.gle/dZDAmqKX3bM8wVWp8\n\n目前開了幾個時段大家可以來繳費\n9/5  12:30-14:00\n9/8  12:30-14:00\n9/12 12:30-14:00\n\n另外，如果時間都對不上，也可以在之後找總務繳交系費\n\n若您有任何繳費相關問題，歡迎隨時與系學會長聯繫\n\n總務 張鈞幃、徐秉辰`, file: null },
-      { id: "2024-04-01", title: "系躲報名開始", date: "2024/09/07", departments: ["總務股"], content: `哈囉大家午安\n我們這學期最後一個活動 系躲開始報名啦\n快點把握機會 手刀填表單🫵\n贏家還會有小獎勵🎁\n活動結束之後還有美味的甜點可以享用喔😋\n\nℹ️系躲資訊\n活動日期：11月21日（四）\n活動時間：17:30~20:00\n活動地點：師大分部（集合時間：17:30/集合地點：S102)\n報名費用：會員$60/非會員$90\n繳費時間：11/11、11/15、11/18、11/19、11/20（確切繳費時間請看IG精選「⏰提醒」，地點：學二交誼廳）\n表單報名期限：11/14（四）23:59\n報名表單：https://forms.gle/RuKQkD5ZQKMKktwdA`, file: null }
+    // =========================================================
+    // Google Sheets 公告資料
+    // =========================================================
+    // 靜態備援資料（Sheets 讀不到時自動使用）
+    const FALLBACK_DATA = [
+      { id: "2026-01-05", title: "2026地科展《脈動|Signal》回顧片已上線", date: "2026/05/20", eventDate: "", departments: ["活動股"], content: "https://youtu.be/0Z9C0QIeUiM", file: null },
+      { id: "2026-01-04", title: "2026/05/29 地科系學會期末會員大會", date: "2026/05/20", eventDate: "", departments: ["會長股"], content: "各位會員好\n\n本會將於2026年05月29日（星期五） 12:30 舉行本學期期末會員大會，地點為公館校區理學院E301教室。\n\n本次會議將進行本會114學年活動回顧及財務報告，另有發放歐趴糖，歡迎會員踴躍參與。若需訂購午餐請填寫以下表單：https://forms.gle/Ay443kigDh1BxCDF8\n\n祝 期末順利\n\n會長 簡志諭", file: { name: "期末會員大會會議通知.pdf", link: "https://drive.google.com/file/d/12xcsFZq6CP-IWZ275JubaLatgRca2rty/view?usp=sharing" } },
+      { id: "2026-99-02", title: "2026/06/12 地科大大家聚", date: "2026/05/16", eventDate: "", departments: ["轉知"], content: "⏰ 時間：2026/06/12（五）17:30 ~ 21:30\n📍 地點：饗食天堂 信義店\n💰 費用：大一至大三免費參加！\n報名連結：https://forms.gle/qsp8X9QERL6aDAmS7", file: null },
+      { id: "2026-03-03", title: "2026/5/15 地科系系躲貓貓", date: "2026/05/08", eventDate: "", departments: ["活動股"], content: "報名連結：https://forms.gle/tqnUvqnJwNFgg4pa6", file: null },
+      { id: "2026-09-04", title: "第四十三屆正副會長改選結果", date: "2026/04/17", eventDate: "", departments: ["選委會"], content: "同意票：45票，不同意票：2票，廢票：2票\n恭喜當選🎉", file: null },
+      { id: "2026-01-01", title: "地科系學會期初會員大會", date: "2026/02/13", eventDate: "2026/03/06", departments: ["會長股"], content: "各位會員好\n\n本會將於2026年3月6日(星期五) 12:30 舉行第二學期期初會員大會。", file: { name: "地科系學會114學年度第二學期期初會員大會會議通知0213.pdf", link: "https://drive.google.com/file/d/1JYig36P-qsEbUqmeqSKU4i5yZEXOYfBs/view?usp=share_link" } },
+      { id: "2025-04-01", title: "系學會費繳交通知", date: "2025/09/02", eventDate: "", departments: ["總務股"], content: "郵局代號：700\n帳號：0001972 0090269\n回覆表單：https://forms.gle/dZDAmqKX3bM8wVWp8", file: null },
     ];
+
+    const SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/1ptgA0H1Kle3wJrpBsAU0s48hhswqEAOIXCP_aTSWZjk/export?format=csv&gid=0";
+
+    const useAnnouncementsData = () => {
+      const [data, setData] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
+
+      const parseRow = (row) => ({
+        id:          row.id?.trim() || '',
+        title:       row.title?.trim() || '',
+        date:        row.date?.trim() || '',
+        eventDate:   row.eventDate?.trim() || '',
+        departments: row.departments ? row.departments.split('|').map(d => d.trim()).filter(Boolean) : [],
+        content:     row.content || '',
+        file: (row.file_name && row.file_link)
+          ? { name: row.file_name.trim(), link: row.file_link.trim() }
+          : null,
+      });
+
+      useEffect(() => {
+        // 設 8 秒 timeout，逾時就用靜態備援資料
+        const timer = setTimeout(() => {
+          if (loading) {
+            console.warn('Sheets fetch timeout，使用靜態備援資料');
+            setData(FALLBACK_DATA);
+            setLoading(false);
+          }
+        }, 8000);
+
+        Papa.parse(SHEETS_CSV_URL, {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: (results) => {
+            clearTimeout(timer);
+            const parsed = results.data.map(parseRow).filter(row => row.id && row.title);
+            if (parsed.length > 0) {
+              setData(parsed);
+            } else {
+              // CSV 格式有問題時也用備援
+              console.warn('Sheets 資料為空，使用靜態備援資料');
+              setData(FALLBACK_DATA);
+            }
+            setLoading(false);
+          },
+          error: (err) => {
+            clearTimeout(timer);
+            console.error('Sheets fetch error，使用靜態備援資料:', err);
+            setData(FALLBACK_DATA);
+            setLoading(false);
+          }
+        });
+
+        return () => clearTimeout(timer);
+      }, []);
+
+      return { data, loading, error };
+    };
+
 
     // Firebase hooks
     const useViewCount = (announcementId) => {
@@ -225,7 +276,7 @@
                 if (idx % 2 === 1) return <span key={idx} className="text-gray-400 dark:text-gray-500 text-sm font-medium">{text}</span>;
                 const fileParts = text.split(fileRegex);
                 return fileParts.map((part, k) => {
-                  if (k % 3 === 1) { const name = part; const link = fileParts[k+1]; return <a key={`f${k}`} href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 my-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"><Download size={16} />附檔：{name}</a>; }
+                  if (k % 3 === 1) { const name = part; const link = fileParts[k+1]; return <a key={`f${k}`} href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 my-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"><Download size={16} />附檔：{name}</a>; }
                   if (k % 3 === 2) return null;
                   return part.split(urlRegex).map((urlPart, j) => urlPart.match(urlRegex) ? <a key={j} href={urlPart} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline break-all">{urlPart}</a> : urlPart);
                 });
@@ -237,17 +288,23 @@
       };
 
       const formattedDate = announcement.date.replace(/\//g, '-');
+
+      // 如果有 eventDate，標題顯示為「eventDate title」
+      const displayTitle = announcement.eventDate
+        ? `${announcement.eventDate} ${announcement.title}`
+        : announcement.title;
+
       const handleToggle = () => { const opening = !isOpen; setIsOpen(opening); if (opening) increment(); };
 
       return (
         <div className="border-b border-gray-200 dark:border-gray-700">
           <button onClick={handleToggle} className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors focus:outline-none group gap-2 md:gap-0 ${isOpen ? 'bg-blue-50/50 dark:bg-gray-800/80' : 'bg-white dark:bg-gray-900 hover:bg-slate-50 dark:hover:bg-gray-800/50'}`}>
             <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
-              <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>
+              <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">日期</span>
               {formattedDate}
             </div>
             <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold md:px-2 flex flex-wrap items-center gap-x-1.5 gap-y-1">
-              <span className="group-hover:underline leading-snug break-words">{announcement.title}</span>
+              <span className="group-hover:underline leading-snug break-words">{displayTitle}</span>
               {attachments.length > 0 && <Paperclip size={13} className="text-gray-400 shrink-0" />}
               {isNew && (
                 <span className="text-[10px] font-bold text-white bg-red-500 px-1.5 py-0.5 rounded-sm tracking-wider shrink-0">NEW</span>
@@ -255,7 +312,7 @@
             </div>
             <div className="w-full md:w-28 shrink-0 flex items-center mt-1 md:mt-0 md:justify-center">
               <div className="flex items-center md:block md:text-center">
-                <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">單位</span>
+                <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">單位</span>
                 <span className="text-sm text-gray-600 dark:text-gray-400">
                   {announcement.departments[0]}
                 </span>
@@ -263,8 +320,7 @@
             </div>
             <div className="w-full md:w-16 text-sm shrink-0 flex items-center justify-between md:justify-center mt-1 md:mt-0">
               <div className="flex items-center gap-1 md:justify-center">
-                <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">瀏覽</span>
-                <Eye size={13} className="text-gray-400 dark:text-gray-500 shrink-0" />
+                <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">瀏覽</span>
                 <span className="font-mono text-gray-500 dark:text-gray-400">
                   {count !== null ? count : '-'}
                 </span>
@@ -278,7 +334,7 @@
                 <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-justify text-sm md:text-base whitespace-pre-wrap md:ml-[136px]">{formatContent(announcement.content)}</div>
                 {attachments.length > 0 && (
                   <div className="mt-4 md:ml-[136px] flex flex-wrap gap-3">
-                    {attachments.map((file, idx) => <a key={idx} href={file.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"><Download size={16} />附檔：{file.name}</a>)}
+                    {attachments.map((file, idx) => <a key={idx} href={file.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm text-sm text-gray-700 dark:text-gray-300 hover:text-[#003B71] dark:hover:text-blue-400 hover:border-[#003B71] dark:hover:border-blue-400 transition-colors shadow-sm"><Download size={16} />附檔：{file.name}</a>)}
                   </div>
                 )}
               </div>
@@ -289,7 +345,7 @@
     };
 
     // AnnouncementsSection
-    const AnnouncementsSection = () => {
+    const AnnouncementsSection = ({ announcementsData, loading }) => {
       const [selectedYears, setSelectedYears] = useState([]);
       const [selectedDepts, setSelectedDepts] = useState([]);
       const [searchQuery, setSearchQuery] = useState('');
@@ -323,7 +379,7 @@
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="搜尋公告標題或內容..."
-              className="w-full pl-11 pr-10 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#003B71]/30 dark:focus:ring-blue-500/30 focus:border-[#003B71] dark:focus:border-blue-500 transition-colors"
+              className="w-full pl-11 pr-10 py-3 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#003B71]/30 dark:focus:ring-blue-500/30 focus:border-[#003B71] dark:focus:border-blue-500 transition-colors"
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
@@ -332,7 +388,7 @@
             )}
           </div>
 
-          <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700 mb-8 flex flex-col gap-6 transition-colors">
+          <div className="bg-slate-50 dark:bg-gray-800 p-6 rounded border border-gray-100 dark:border-gray-700 mb-8 flex flex-col gap-6 transition-colors">
             <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-600 pb-2">
               <Filter size={18} className="text-gray-500 dark:text-gray-400" />
               <h4 className="text-sm font-bold text-gray-700 dark:text-gray-200 tracking-wide">篩選條件</h4>
@@ -355,10 +411,12 @@
             <div className="w-32 text-center shrink-0">日期</div>
             <div className="flex-1 md:px-2 text-center">標題</div>
             <div className="w-28 text-center shrink-0">發佈單位</div>
-            <div className="w-16 text-center shrink-0 flex items-center justify-center gap-1"><Eye size={13} />瀏覽</div>
+            <div className="w-16 text-center shrink-0">瀏覽</div>
           </div>
           <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
-            {filteredData.length > 0 ? filteredData.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />) : (
+            {loading ? (
+              <div className="py-16 text-center text-gray-400 dark:text-gray-500 text-sm">載入中⋯</div>
+            ) : filteredData.length > 0 ? filteredData.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />) : (
               <div className="text-center py-16 text-gray-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center">
                 <p className="text-lg font-medium mb-1">沒有符合條件的公告</p>
                 <p className="text-sm">請嘗試調整您的篩選條件。</p>
@@ -370,7 +428,7 @@
     };
 
     // AdminSection
-    const AdminSection = () => {
+    const AdminSection = ({ announcementsData = [] }) => {
       const [time, setTime] = useState(new Date());
       const [allViews, setAllViews] = useState({});
       useEffect(() => { const t = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(t); }, []);
@@ -387,18 +445,18 @@
             <p className="text-gray-400 dark:text-gray-500 text-sm tracking-widest uppercase">Admin Dashboard</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
               <ClockIcon size={40} className="text-blue-500 mb-4 opacity-80" />
               <p className="text-sm text-gray-500 dark:text-gray-400 font-bold mb-1">系統當前時間</p>
               <h3 className="text-2xl font-mono font-bold text-gray-800 dark:text-gray-100">{time.toLocaleString('zh-TW', { hour12: false })}</h3>
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center">
               <ActivityIcon size={40} className="text-green-500 mb-4 opacity-80" />
               <p className="text-sm text-gray-500 dark:text-gray-400 font-bold mb-1">網站總瀏覽人次</p>
               <h3 className="text-4xl font-mono font-bold text-gray-800 dark:text-gray-100">{overallCount.toLocaleString()}</h3>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-slate-50 dark:bg-gray-800 flex items-center gap-2">
               <DashboardIcon size={20} className="text-gray-500" />
               <h4 className="font-bold text-gray-800 dark:text-gray-200">各項公告瀏覽數據總覽</h4>
@@ -429,7 +487,7 @@
     };
 
     // IntroSection
-    const IntroSection = ({ onNavigate }) => {
+    const IntroSection = ({ onNavigate, announcementsData, loading }) => {
       const recentAnnouncements = announcementsData.slice(0, 5);
       return (
         <div className="fade-in-up">
@@ -449,10 +507,12 @@
                 <div className="w-32 text-center shrink-0">日期</div>
                 <div className="flex-1 md:px-2 text-center">標題</div>
                 <div className="w-28 text-center shrink-0">發佈單位</div>
-                <div className="w-16 text-center shrink-0 flex items-center justify-center gap-1"><Eye size={13} />瀏覽</div>
+                <div className="w-16 text-center shrink-0">瀏覽</div>
               </div>
               <div className="border-t-2 border-blue-800 md:border-t-0 dark:border-blue-500">
-                {recentAnnouncements.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />)}
+                {loading ? (
+                  <div className="py-12 text-center text-gray-400 dark:text-gray-500 text-sm">載入中⋯</div>
+                ) : recentAnnouncements.map((a, i) => <AnnouncementAccordion key={a.id} announcement={a} index={i} />)}
               </div>
             </section>
           </div>
@@ -470,7 +530,7 @@
         </div>
         <div className="grid md:grid-cols-2 gap-8 md:gap-10">
           {eventsData.map((event) => (
-            <div key={event.id} className="bg-white dark:bg-gray-800 group flex flex-col h-full rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
+            <div key={event.id} className="bg-white dark:bg-gray-800 group flex flex-col h-full rounded shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
               <div className="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-700">
                 <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" referrerPolicy="no-referrer" onError={(e) => { e.target.onerror=null; e.target.src="https://placehold.co/1920x1080/e2e8f0/64748b?text=Image+Loading+Error"; }} />
               </div>
@@ -573,7 +633,7 @@
           <div className="flex gap-3 mb-10 justify-center flex-wrap">
             {termsData.map(term => (
               <button key={term.id} onClick={() => setActiveTermId(term.id)}
-                className={`px-5 py-2 rounded-full text-sm font-bold border transition-all duration-200 flex items-center gap-2
+                className={`px-5 py-2 rounded text-sm font-bold border transition-all duration-200 flex items-center gap-2
                   ${activeTermId === term.id
                     ? 'bg-[#003B71] text-white border-[#003B71] dark:bg-blue-600 dark:border-blue-600'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700'}`}>
@@ -629,16 +689,16 @@
               return (
                 <a key={doc.id} href={doc.link} target="_blank" rel="noreferrer" className={`w-full px-4 py-3 md:py-4 flex flex-col md:flex-row items-start md:items-center text-left transition-colors group gap-2 md:gap-0 border-b border-gray-200 dark:border-gray-700 hover:bg-blue-50/50 dark:hover:bg-gray-800/80 ${rowBg}`}>
                   <div className="w-full md:w-32 text-sm font-medium text-gray-700 dark:text-gray-300 md:text-center shrink-0 flex items-center md:block">
-                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">日期</span>{formattedDate}
+                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">日期</span>{formattedDate}
                   </div>
                   <div className="flex-1 text-[#003399] dark:text-blue-400 font-bold pr-4"><span className="group-hover:underline leading-snug break-all">{doc.title}</span></div>
                   <div className="w-full md:w-24 text-sm md:text-center shrink-0 flex items-center mt-1 md:mt-0">
-                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">格式</span>
+                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">格式</span>
                     <span className={`${tagBg} text-white text-[11px] px-2 py-0.5 rounded-sm tracking-wider`}>{doc.type}</span>
                   </div>
                   <div className="w-full md:w-28 text-sm md:text-center shrink-0 flex items-center mt-1 md:mt-0">
-                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">檔案</span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#003B71] dark:group-hover:text-blue-400 group-hover:border-[#003B71] dark:group-hover:border-blue-400 transition-colors shadow-sm ml-auto md:ml-0 md:mx-auto"><Download size={14} /> 點此下載</span>
+                    <span className="md:hidden mr-2 text-xs font-bold text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded-sm">檔案</span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm text-xs font-medium text-gray-700 dark:text-gray-300 group-hover:text-[#003B71] dark:group-hover:text-blue-400 group-hover:border-[#003B71] dark:group-hover:border-blue-400 transition-colors shadow-sm ml-auto md:ml-0 md:mx-auto"><Download size={14} /> 點此下載</span>
                   </div>
                 </a>
               );
@@ -655,6 +715,9 @@
     function App() {
       const [activeTab, setActiveTab] = useState('intro');
       useOverallSiteViews();
+
+      // 從 Google Sheets 讀取公告資料
+      const { data: announcementsData, loading: announcementsLoading } = useAnnouncementsData();
 
       // 手機版選單
       const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -729,14 +792,14 @@
 
       const renderContent = () => {
         switch (activeTab) {
-          case 'intro': return <IntroSection onNavigate={setActiveTab} />;
-          case 'announcements': return <AnnouncementsSection />;
+          case 'intro': return <IntroSection onNavigate={setActiveTab} announcementsData={announcementsData} loading={announcementsLoading} />;
+          case 'announcements': return <AnnouncementsSection announcementsData={announcementsData} loading={announcementsLoading} />;
           case 'events': return <EventsSection />;
           case 'history': return <HistorySection />;
           case 'members': return <MembersSection />;
           case 'docs': return <DocsSection />;
-          case 'admin': return <AdminSection />;
-          default: return <IntroSection onNavigate={setActiveTab} />;
+          case 'admin': return <AdminSection announcementsData={announcementsData} />;
+          default: return <IntroSection onNavigate={setActiveTab} announcementsData={announcementsData} loading={announcementsLoading} />;
         }
       };
 
@@ -746,7 +809,7 @@
           {/* 密碼保護 Modal */}
           {showPasswordModal && (
             <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowPasswordModal(false)}>
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-80 mx-4" onClick={(e) => e.stopPropagation()}>
+              <div className="bg-white dark:bg-gray-800 rounded shadow-2xl p-8 w-80 mx-4" onClick={(e) => e.stopPropagation()}>
                 <h3 className="text-xl font-bold text-[#003B71] dark:text-blue-400 mb-2 text-center">後台管理</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">請輸入密碼以繼續</p>
                 <input
@@ -756,17 +819,17 @@
                   onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
                   placeholder="輸入密碼"
                   autoFocus
-                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-100 mb-2 transition-colors
+                  className={`w-full px-4 py-3 rounded border text-sm focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-100 mb-2 transition-colors
                     ${passwordError ? 'border-red-400 focus:ring-red-300 dark:border-red-500' : 'border-gray-300 focus:ring-[#003B71]/30 dark:border-gray-600'}`}
                 />
                 {passwordError && <p className="text-xs text-red-500 mb-3 text-center">密碼錯誤，請再試一次</p>}
                 <div className="flex gap-3 mt-4">
                   <button onClick={() => { setShowPasswordModal(false); setPasswordInput(''); setPasswordError(false); }}
-                    className="flex-1 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    className="flex-1 py-2.5 rounded border border-gray-300 dark:border-gray-600 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     取消
                   </button>
                   <button onClick={handlePasswordSubmit}
-                    className="flex-1 py-2.5 rounded-lg bg-[#003B71] dark:bg-blue-600 text-white text-sm font-bold hover:bg-[#002a52] dark:hover:bg-blue-700 transition-colors">
+                    className="flex-1 py-2.5 rounded bg-[#003B71] dark:bg-blue-600 text-white text-sm font-bold hover:bg-[#002a52] dark:hover:bg-blue-700 transition-colors">
                     確認
                   </button>
                 </div>
